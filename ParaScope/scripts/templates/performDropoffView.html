@@ -1,0 +1,73 @@
+<div data-role="view" id="performDropoffView" data-model="parascope.controllers.route.viewModel">
+    
+    <div class="row" style="padding-top:25px">
+        
+        <div class="col-lg-6">
+            
+            <!-- start: who / where -->
+            <div class="body-row">
+                <h2 data-bind="text: job.SubTitle" style="margin:0px"></h2>
+            </div>
+            <!-- end: who / where -->
+            <label>Account</label>
+            <p  data-bind="text: job.AccountCode"></p>
+
+            <div class="body-row" data-bind="visible: job.RideComments != ''">
+                <label>Ride Comments</label>
+                <p  data-bind="text: job.RideComments"></p>
+            </div>
+            <div class="body-row" data-bind="visible: job.RiderComments != ''">
+                <label>Rider Comments</label>
+                <p  data-bind="text: job.RiderComments"></p>
+            </div>
+            <div class="body-row" data-bind="visible: job.SpecialAssistance.length > 0">
+                <label>Special Assistance Codes</label>
+                <p  data-bind="text: formatCurrentJobSpecialAssistance"></p>
+            </div>
+            
+        </div>
+        
+        <div class="col-lg-6">
+            <form>		
+                <fieldset>
+
+            
+                    <!-- start: odometer -->
+                     <div class="body-row">                         
+                         
+                        <label>Odometer</label>
+                         <div class="input-group">
+                          <span class="input-group-btn">
+                              <div class="btn btn-default btn-xlg" data-bind="click: decrementField" data-field="currentOdometer"><i class="icon-minus"></i></div>
+                         </span>
+                          <input class="form-control input-lg" type="number" data-bind="value: currentOdometer" />
+                          <span class="input-group-btn">
+                              <div class="btn btn-default btn-xlg" data-bind="click: incrementField" data-field="currentOdometer"><i class="icon-plus"></i></div>  
+                         </span>
+                             
+                        </div>
+                        
+                     </div>                                          
+                    
+                    
+                    <!-- start: submit buttons -->
+                    <div class="submit-row">
+                        <div class="btn-group btn-group-justified">
+                            
+                            <div style="width:70%" class="btn btn-success btn-xlg" data-bind="click: performDropoff">Confirm Dropoff</div>
+                            <div style="width:15%" class="btn btn-default btn-xlg" data-bind="click:cancelPerform"><i class="icon-remove"></i></div>
+    
+                        </div>
+                    </div>
+                    <!-- end: submit buttons -->
+
+
+
+      
+
+                </fieldset>
+    	    </form>   
+        </div>     
+        
+    </div>   
+</div>

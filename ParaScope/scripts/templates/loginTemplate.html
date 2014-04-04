@@ -1,0 +1,19 @@
+<div data-role="view" id="loginView" data-model="parascope.controllers.login.viewModel">
+	<form>
+		<ul data-role="listview" data-style="inset">
+			<li>
+				<label>
+					PIN
+					<input type="number" data-bind="value: credentials.password"/>
+				</label>
+			</li>
+			<li>
+				<label>
+					Customer
+					<input type="text" data-bind="value: credentials.customer"/>
+				</label>
+			</li>
+		</ul>
+	</form>
+	<button data-align="right" data-role="button" style="font-size: 1.6em;" data-bind="click: login">login</button>
+</div>

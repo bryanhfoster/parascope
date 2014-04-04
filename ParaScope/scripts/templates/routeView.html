@@ -1,0 +1,32 @@
+<div data-role="view" id="routeView" data-model="parascope.controllers.route.viewModel" data-layout="mobile-tabstrip">
+    
+    <!-- <div data-template="testTemplate" data-bind="source: this"></div>
+    <script id="testTemplate" type="text/x-kendo-template">
+    #=currentOdometer#
+    </script>
+    
+    <h3>
+    	Driver: <span data-bind="text: route.DriverName"></span>
+    </h3>-->
+    
+    <!-- start: controls -->
+    <div class="row controls-row">
+        <button class="btn btn-danger btn-xlg" data-bind="click:showEndRoute,visible:showRouteEndButton">Log Out</button>
+        <button class="btn btn-success btn-xlg" data-bind="visible: startButtonIsVisible,click:showStartRoute">Start Route</button>
+    </div>
+    <!-- end: controls -->
+    
+    <!-- start: list -->
+	<ul id="jobList" data-role="listview"
+		data-style="inset"
+		data-template="jobTemplate"
+		data-bind="source: route.Jobs">
+	</ul>
+    <!--<div data-role="scrollview" 
+        data-source="parascope.controllers.route.viewModel.jobSource" 
+        data-template="jobScrollTemplate"
+        data-items-per-page="1"
+        data-content-height="100%"
+        data-enable-pager="false">
+    </div>-->
+</div>

@@ -1,0 +1,56 @@
+<div data-role="modalview" id="performQuestionView" data-model="parascope.controllers.route.viewModel" style="width: 75%; height:75%">
+    
+    <!--start: Modal Header -->
+    <div class="row modalClose-row">
+        
+        <div class="col-lg-9">
+          <h3>Picking up</h3>
+        </div>
+        <div class="col-lg-3">
+          <div class="pull-right" data-bind="click: cancelPerformQuestion"><i class="icon-remove-sign"></i></div>
+        </div>
+
+    </div>
+    <!--end: Modal Header -->
+    
+            <hr>
+    
+    <!--start: Modal Body -->
+    <div class="row modalBody" >
+        
+        <div class="col-lg-12">
+            
+            <h3 style="background-color:green;" data-bind="text: userMessage"></h3>
+            
+            
+            <div class="row modalBody-row" >
+                <div class="col-lg-12">
+                    <label>who</label>
+                    <h1 data-bind="text: job.SubTitle"></h1>   
+                </div>
+            </div>
+        	
+            <div class="row modalBody-row" >
+                <div class="col-lg-12">
+                    <label>where</label>
+                    <h1 data-bind="text: job.Title"></h1>              
+                </div>
+            </div>
+        	
+            <div class="row modalSubmit-row" >
+                <div class="col-lg-12">          
+                    <div class="btn-group btn-group-justified">
+                        <div class="btn btn-xlg btn-success" data-bind="click:navigatePickupPerform"><i class="icon-ok "></i> Present</div> 
+                        <div class="btn btn-xlg btn-danger" data-bind="click:navigateNoShow"><i class="icon-remove"></i> Absent</div>
+                        
+                    </div>
+                </div>
+            </div>
+        	
+
+         
+        </div>
+    </div> 
+    <!--end: Modal Body -->
+    
+</div>

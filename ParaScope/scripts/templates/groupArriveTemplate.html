@@ -1,0 +1,14 @@
+<div class="row">        
+    <div class="col-lg-12">            
+    
+        #if (job.JobType == "1") {# Pick-Up #}else if (job.JobType == "2") {# Drop-Off #}#
+        
+        @
+        
+        #=job.ScheduledStartTimeString#
+      
+        
+        
+        #=job.RiderFirstName# #=job.RiderLastName# 
+    </div>
+</div>

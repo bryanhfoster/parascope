@@ -1,0 +1,30 @@
+<div data-role="splitview" id="mapView" data-show="parascope.controllers.geography.viewModel.show">            
+    <div data-role="pane" id="side-pane">
+        <div data-role="view" data-model="parascope.controllers.geography.viewModel">
+            
+            <!--start: Header -->
+            <div class="row row-topControls">
+                <div class="col-lg-6">
+                    <div class="btn btn-default" data-bind="click: back"><i class="icon-reply"></i> Back</div>
+                    <div class="btn btn-default" data-bind="click: refreshDirections"><i class="icon-refresh"></i></div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="pull-right" style="width:100%; text-align:right;"><p style="float:left; margin:0; margin-top:5px;">Follow</p> <input data-role="switch" data-bind="checked:followVehicle"/></div>
+                </div>
+            </div>
+            <!--end: Header -->
+           
+           <ul data-role="listview"
+				data-style="inset"
+				data-template="directionsTemplate"
+				data-bind="source: directionsList"><li>test</li>
+			</ul>
+        </div>
+            
+    </div>
+    <div data-role="pane" data-layout="main-default" id="main-pane">
+        <div data-role="view">
+        <div id="map"></div>
+        </div>
+    </div>
+</div>

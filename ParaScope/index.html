@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<!------------------------------------------------
+		feel free to put stuff that you want commented out in here            
+		<link rel="stylesheet" href="styles/esri.css" />
+		--------------------------------------------------->
+
+		<!-- do NOT change the ordering of these files -->
+		<link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css" />
+
+		<script>
+			var dojoConfig = {
+				parseOnLoad: true,
+				packages: [
+					{
+						name: "app",
+						location: location.pathname.replace(/\/[^/]+$/, "") + "/scripts/app"
+					},{
+						name: "kendo",
+						location: location.pathname.replace(/\/[^/]+$/, "") + "/kendo/js",
+						main: "kendo.mobile.min"
+					}
+			
+				]  
+			};
+		</script>
+		<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3"></script>
+		<script src="scripts/lib/pubnub-3.5.3.min.js"></script>
+		<script src="scripts/lib/signature_pad.js"></script>
+		<script src="kendo/js/jquery.min.js"></script>
+		<script src="cordova.js"></script>
+		<script src="powermanagement.js"></script>
+		<script src="WebIntent.js"></script>
+		<script src="scripts/main.js"></script>
+		<script src="scripts/lib/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="styles/bootstrap.min.css">
+        
+        <link href="scripts/lib/font-awesome-3.2.1/css/font-awesome.min.css" rel="stylesheet">
+        <link href="fonts/fonts.css" rel="stylesheet">
+		<!-- do NOT change the ordering of these files -->
+        
+        <!-- CUSTOM STYLES - load last for overriding purposes -->
+        <link href="styles/main.css" rel="stylesheet" />
+
+	</head>
+	<body>
+		
+        
+		<div data-role="layout" data-id="mobile-tabstrip">
+			<div data-role="footer">
+				<div data-role="tabstrip" id="mainTabs">
+					<a id="scheduleTab" href="#routeView" data-icon="recents">Schedule</a>
+					<a id="messagesTab" href="#messagesView" data-icon="organize">Messages</a>
+					
+				</div>
+			</div>
+            
+            <!-- start: header -->
+			<div data-role="header"> 
+                <!-- start: driver name and connection -->
+                <div class="row masthead">
+                    <div class="col-lg-6">
+                        <p>Welcome: <span id="driverName" data-bind="text:route.DriverName,click:showDebugView"></span><p>
+                    </div>
+                    <div class="col-lg-6" style="text-align:right;">
+                        
+                        <i id="logoff" style="margin-right:8px; font-size:25px;" class="icon-off"></i>
+                        
+                        <i class="icon-signal" id="deviceStatus"></i>
+                    </div>
+                    
+                </div>
+                            
+                
+ 
+                            
+			</div>
+            <!-- end: header -->
+                            
+		</div>
+	</body>
+
+</html>

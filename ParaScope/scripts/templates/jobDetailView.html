@@ -1,0 +1,88 @@
+<div data-role="view" id="detailView" data-model="parascope.controllers.route.viewModel">
+    
+    <!--start: Header -->
+    <div class="row row-topControls">
+        <div class="btn btn-default" data-bind="click: cancelPerform"><i class="icon-reply"></i> Back</div>
+    </div>
+    <!--end: Header -->
+    
+    
+    <h3 style="background-color:green;" data-bind="text: userMessage"/>
+    
+    <div class="row">
+        <div class="col-lg-6">
+            <!-- start: who / where -->
+            <div class="body-row">
+                <h2 data-bind="text: job.SubTitle" style="margin:0px"><span ></span></h2>
+                <h2 style="margin:0px">
+                    <span data-bind="text: job.Title"></span>                    
+                </h2>                
+            </div>
+            <!-- end: who / where -->
+            
+            <!-- start: comments -->
+            <label>Account</label>
+            <p  data-bind="text: job.AccountCode"></p>
+
+            <div class="body-row" data-bind="visible: job.RideComments != ''">
+                <label>Ride Comments</label>
+                <p  data-bind="text: job.RideComments"></p>
+            </div>
+            <div class="body-row" data-bind="visible: job.RiderComments != ''">
+                <label>Rider Comments</label>
+                <p  data-bind="text: job.RiderComments"></p>
+            </div>
+            <div class="body-row" data-bind="visible: job.SpecialAssistance.length > 0">
+                <label>Special Assistance Codes</label>
+                <p  data-bind="text: formatCurrentJobSpecialAssistance"></p>
+            </div>
+    
+            <!-- end: comments -->
+            
+        </div>
+        
+        <div class="col-lg-6">
+
+                    <div class="form-group">
+                        <label>Scheduled <span data-bind="text:currentJobType"></span> Time</label>
+                        <h3 data-bind="text:formatCurrentJobTime"></h3>
+                    </div>
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <h3 data-bind="text: job.Priority"></h3>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <h3 data-bind="text: job.PhoneNumber" ></h3>
+                    </div>
+                    <div class="form-group">
+                        <label>Fare</label>
+                        <h3 data-bind="text: job.RideFare"></h3>
+                    </div>
+                    <div class="form-group">
+                        <label>Number Of Escorts</label>
+                        <h3 data-bind="text: job.Escorts"></h3>
+                    </div>
+                    <div class="form-group">
+                        <label>Number Of Children</label>
+                        <h3 data-bind="text: job.NumberOfChildren"></h3>
+                    </div>
+                    <div class="form-group">
+                        <label>Number Of Seats</label>
+                        <h3 data-bind="text: job.AmbulatorySeats"></h3>
+                    </div>
+                    <div class="form-group">
+                        <label>Number Of Wheelchairs</label>
+                        <h3 data-bind="text: job.WheelchairSeats"></h3>
+                    </div>
+                    <div class="form-group">
+                        <label>Number Of Stretchers</label>
+                        <h3 data-bind="text: job.StretcherCount" ></h3>
+                    </div>
+                    
+                    
+        
+        </div>
+    </div>
+
+</div>

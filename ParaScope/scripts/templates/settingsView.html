@@ -1,0 +1,41 @@
+<div data-role="modalview" id="settingsView" data-model="parascope.controllers.login.viewModel" style="width: 50%;">
+    
+
+    <!--start: Modal Header -->
+    <div class="row modalClose-row">
+        
+        <div class="col-lg-9">
+          <h3>Settings</h3>
+        </div>
+        <div class="col-lg-3">
+        </div>
+
+    </div>
+    <!--end: Modal Header -->
+    
+    
+    
+    <div class="row" style="padding:20px 0;">
+        
+        <div class="col-lg-12">
+        	<form>		
+                <fieldset>
+
+                    <div class="form-group">
+                        <label>Customer</label>
+                        <input type="text" class="form-control input-lg" data-bind="value: credentials.customer" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class=" input-lg form-control" data-bind="value: credentials.description" />
+                    </div>
+                    
+                    <div class="btn btn-primary btn-block btn-xlg" data-bind="click: saveSettings">Submit</div>
+                  
+                </fieldset>
+    	    </form>            
+        </div>
+    </div> 
+    
+</div>

@@ -1,0 +1,13 @@
+        <li>
+            #= delta #: 
+            #if (JobType == "1" || JobType == "2") {# 
+                #=ScheduledStartTimeString# #if (JobType == "1") {# Pick-Up #}else if (JobType == "2") {# Drop-Off #}# 
+                for #=RiderFirstName# #=RiderLastName# #=LocationName# #=Address#     
+            #}else {# 
+                 #=Title#                    
+                from                    
+                #=ScheduledStartTimeString# 
+                to 
+                #=ScheduledEndTimeString# 
+            #}#       
+        </li>

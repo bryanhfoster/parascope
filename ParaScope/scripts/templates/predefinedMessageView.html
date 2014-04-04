@@ -1,0 +1,14 @@
+<div data-role="view" id="predefinedMessageView" data-model="parascope.controllers.messages.viewModel">
+    
+    <div class="row row-topControls">
+        <div class="btn btn-default" data-bind="click:cancelSendPredefinedMessage"><i class="icon-reply"></i> Back</div>
+    </div>
+	
+		<h2>Send Message To Dispatcher</h2>
+	
+	<ul data-role="listview"
+		data-style="inset"
+		data-template="predefinedMessageTemplate"
+		data-bind="source: predefinedMessages">
+	</ul>
+</div>

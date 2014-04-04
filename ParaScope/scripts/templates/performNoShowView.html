@@ -1,0 +1,82 @@
+<div data-role="view" id="performNoShowView" data-model="parascope.controllers.route.viewModel">
+
+    <!-- start: feedback message to user -->
+    <div class="well hide" id="userMessage">
+        <div class="col-lg-1">
+            <i class="icon-phone"></i>
+        </div>
+        <div class="col-lg-11">
+            <h1 data-bind="text: userMessage"></h1>
+        </div>
+    </div>
+    <!-- end: feedback message to user -->
+
+    <div class="row" style="padding-top:25px">
+
+        <div class="col-lg-6">
+
+            <!-- start: who / where -->
+            <div class="body-row">
+                <h2 data-bind="text: job.SubTitle" style="margin:0px"></h2>
+            </div>
+            <!-- end: who / where -->
+
+        </div>
+
+        <div class="col-lg-6">
+            <form>
+                <fieldset>
+
+                    <!-- start: odometer -->
+                    <div class="body-row">
+
+                        <label>Odometer</label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <div class="btn btn-default btn-xlg" data-bind="click: decrementField" data-field="currentOdometer">
+                                    <i class="icon-minus"></i>
+                                </div>
+                            </span>
+                            <input class="form-control input-lg" type="number" data-bind="value: currentOdometer" />
+                            <span class="input-group-btn">
+                                <div class="btn btn-default btn-xlg" data-bind="click: incrementField" data-field="currentOdometer">
+                                    <i class="icon-plus"></i>
+                                </div>
+                            </span>
+
+                        </div>
+
+                    </div>
+                    <!-- end: odometer -->
+
+                    <!-- start: reasons -->
+                    <div class="body-row">
+                        <div class="btn-group-vertical" id="noShowReasons" style="width:100%">
+                            <div class="btn btn-lg btn-default" data-bind="click:noShowReasonSelected" data-value="1">No Client</div>
+                            <div class="btn btn-lg btn-default" data-bind="click:noShowReasonSelected" data-value="2">Cancel At Door</div>
+                            <div class="btn btn-lg btn-default" data-bind="click:noShowReasonSelected" data-value="0">Not Ready</div>
+                            <div class="btn btn-lg btn-default" data-bind="click:noShowReasonSelected" data-value="4">Admin Cancel</div>
+                            <div class="btn btn-lg btn-default" data-bind="click:noShowReasonSelected" data-value="3">Not Ready, Will Return</div>
+                        </div>
+                    </div>
+                    <!-- end: reasons -->
+
+                    <!-- start: submit buttons -->
+                    <div class="submit-row">
+                        <div class="btn-group btn-group-justified">
+
+                            <div style="width:70%" class="btn btn-success btn-xlg" data-bind="click: performNoShow,enabled:allowPerformNoShow">Confirm No-Show</div>
+                            <div style="width:15%" class="btn btn-default btn-xlg" data-bind="click:cancelPerform">
+                                <i class="icon-remove"></i>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- end: submit buttons -->
+
+                </fieldset>
+            </form>
+        </div>
+
+    </div>
+</div>
