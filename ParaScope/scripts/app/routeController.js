@@ -1,7 +1,7 @@
 define(["app/communicationManager","app/geographyController","app/utilities"],
 function (communicationManager,geographyController,utilities) {  
            
-                var canvas,signaturePad; 
+                var canvas,signaturePad,validator; 
     
     var me = {        
         init: function(){
@@ -21,6 +21,7 @@ function (communicationManager,geographyController,utilities) {
             currentOdometer: 0,
             allowPerformNoShow: false,
             currentNoShowReason:null,
+            currentSignatureReason:null,
             jobsToGroupArrive: [],
             currentJobType: function(){
                 var currentJob = me.viewModel.get("job");
@@ -51,7 +52,12 @@ function (communicationManager,geographyController,utilities) {
             },
             incrementField: function(e){
                 var field = $(e.currentTarget).data("field");
-                me.viewModel.set(field,parseInt(me.viewModel.get(field),10) + 1);
+                var fieldValue = me.viewModel.get(field);
+                if(fieldValue == "" || parseInt(fieldValue,10) == "NaN"){
+                    me.viewModel.set(field,1);
+                }else{
+                	me.viewModel.set(field,parseInt(fieldValue,10) + 1);                    
+                }
             },
             decrementField: function(e){
                 var field = $(e.currentTarget).data("field");
@@ -65,12 +71,20 @@ function (communicationManager,geographyController,utilities) {
                 me.viewModel.set("currentNoShowReason",$(e.currentTarget).data("value"));
                 $("#noShowReasons > div").toggleClass("active",false);
                 $(e.currentTarget).toggleClass("active",true);
-                //window.plugins.statusBarNotification.notify(me.viewModel.get("currentNoShowReason"), me.viewModel.get("currentNoShowReason"));
+            },
+            signatureReasonSelected: function(e){
+                me.viewModel.set("allowConfirmSignature",true);
+                me.viewModel.set("currentSignatureReason",$(e.currentTarget).data("value"));
+                $("#signatureReasons > div").toggleClass("active",false);
+                $(e.currentTarget).toggleClass("active",true);
             },
             showGeography: function(){                
                     kendoApp.navigate("#geographyView");
             },
             startRoute: function(){
+                if (!validator.validate()) {
+                   return;
+                }
                 var route = me.viewModel.get("route");
                 me.viewModel.set("currentOdometer", route.ExpectedRouteStartOdometer);
                 geographyController.setOdometer(route.ExpectedRouteStartOdometer);
@@ -99,12 +113,16 @@ function (communicationManager,geographyController,utilities) {
             },
             showEndRoute: function(){                
                 me.viewModel.set("currentOdometer",me.viewModel.getOdometerFromGeography());
-                $("#endRouteView").kendoMobileModalView("open");
+                $("#endRouteView").kendoMobileModalView("open");                
+                validator = $("#endRouteView").kendoValidator().data("kendoValidator");
             },
             hideEndRoute: function(){
                 $("#endRouteView").kendoMobileModalView("close");
             },
             endRoute: function(){
+                if (!validator.validate()) {
+                   return;
+                }
                 me.viewModel.set("route", null);
                 var odometer = me.viewModel.get("currentOdometer");
                 communicationManager.addRouteEndReport(odometer,me.viewModel.endRouteCompleted);
@@ -118,7 +136,8 @@ function (communicationManager,geographyController,utilities) {
                 },1000)
             },
             showStartRoute: function(){
-                $("#startRouteView").kendoMobileModalView("open");
+                $("#startRouteView").kendoMobileModalView("open");                
+                validator = $("#startRouteView").kendoValidator().data("kendoValidator");
             },
             hideStartRoute: function(){
                 $("#startRouteView").kendoMobileModalView("close");
@@ -204,9 +223,18 @@ function (communicationManager,geographyController,utilities) {
                 }
                 else if(e.data.JobType == 2){
                     kendoApp.navigate("#performDropoffView");
+                	validator = $("#performDropoffView").kendoValidator().data("kendoValidator");
+                    
                 }
             },
+            clearSignature:function(){            	
+                signaturePad.clear();  
+            },
             captureSignatureClick: function(e){
+                           
+                me.viewModel.set("currentSignatureReason",null);
+                $("#signatureReasons > div").toggleClass("active",false);                
+                me.viewModel.set("allowConfirmSignature",false);
                 if(!canvas){
                     canvas = document.querySelector("canvas");
                     signaturePad = new SignaturePad(canvas);                    
@@ -217,22 +245,25 @@ function (communicationManager,geographyController,utilities) {
                 
                 canvas.width = $("#canvasContainer").width()-50;
                 canvas.height = 200;//$(window).height()- 100;
-                
-                //var ratio =  window.devicePixelRatio || 1;
-                //canvas.width = canvas.offsetWidth * ratio;
-                //canvas.height = canvas.offsetHeight * ratio;
-                //canvas.getContext("2d").scale(ratio, ratio);
             },
             cancelCaptureSignature: function(e){
-                    kendoApp.navigate("#performPickupView");
+                var job = me.viewModel.get("job");
+                me.viewModel.set("allowPerformPickup",!job.SignatureRequired);
+                kendoApp.navigate("#performPickupView");
                 me.viewModel.set("signature",null);
             },
+            pickupPerformButtonText: function(){
+                return me.viewModel.get("allowPerformPickup") ? "Perform" : "Signature Required";
+            },
             confirmCaptureSignature: function(e){
+                me.viewModel.set("allowPerformPickup",true);
                 kendoApp.navigate("#performPickupView");
                 me.viewModel.set("signature",signaturePad.toDataURL());
             },
             performNoShow: function(e){
-
+				if (!validator.validate()) {
+                   return;
+                }
                 var job = me.viewModel.get("job");
                 var odometer = me.viewModel.get("currentOdometer");
                 
@@ -247,17 +278,18 @@ function (communicationManager,geographyController,utilities) {
                 kendoApp.navigate("#routeView");
             },
             performPickup: function(e){
-                //if (!validator.validate()) {
-                //   return;
-                //}
+                if (!validator.validate()) {
+                   return;
+                }
                 
                 var job = me.viewModel.get("job");
                 var odometer = me.viewModel.get("currentOdometer");
                 var jobIndex = 0;
                 
                 var signature = me.viewModel.get("signature");
+                var signatureReason = me.viewModel.get("currentSignatureReason");
                 communicationManager.addJobPerformPickup(job.RideId,utilities.makeValidNumber(job.RideFare),job.JobType,utilities.makeValidNumber(job.NumberOfChildren),
-                											utilities.makeValidNumber(job.Escorts),utilities.makeValidNumber(job.NumberOfPasses),odometer,signature);
+                											utilities.makeValidNumber(job.Escorts),utilities.makeValidNumber(job.NumberOfPasses),odometer,signature,signatureReason);
                 
                 //clear signature                
                 me.viewModel.set("signature",null);
@@ -276,6 +308,9 @@ function (communicationManager,geographyController,utilities) {
                 kendoApp.navigate("#routeView");
             },
             performDropoff: function(e){
+                if (!validator.validate()) {
+                   return;
+                }
                 var job = me.viewModel.get("job");
                 var odometer = me.viewModel.get("currentOdometer");
                 var jobIndex = 0;
@@ -288,13 +323,14 @@ function (communicationManager,geographyController,utilities) {
                 });
                 me.viewModel.set("route.Jobs",jobs);
                 kendoApp.navigate("#routeView");
+                
+                validator = $("#performDropoffView").kendoValidator().data("kendoValidator");
             },
             startButtonClick: function(e){
                 var jobIndex = null;
                 var job = e.data;
                                 
                 var odometer = me.viewModel.get("currentOdometer");
-                //this does not verify odometer... in fact coulud leave it up to comManager to get it, but we put it here in case we want to modify and pass
                 var nonServiceMessage = {nonServicePeriodReportType:0,nonServicePeriodType:job.JobType,odometer:odometer};
                 
                 $.grep(me.viewModel.get("route.Jobs"),function(element,index){
@@ -309,7 +345,6 @@ function (communicationManager,geographyController,utilities) {
                 var job = e.data;
                 var odometer = me.viewModel.get("currentOdometer");
                                 
-                //this does not verify odometer... in fact coulud leave it up to comManager to get it, but we put it here in case we want to modify and pass
                 var nonServiceMessage = {nonServicePeriodReportType:1,nonServicePeriodType:job.JobType,odometer:odometer};
                 
                 communicationManager.addNonServiceReport(nonServiceMessage);
@@ -321,14 +356,21 @@ function (communicationManager,geographyController,utilities) {
             },
             navigatePickupPerform: function(e){
                 var job = me.viewModel.get("job");
+                me.viewModel.set("allowPerformPickup",!job.SignatureRequired);
+                
+                
+                me.viewModel.set("signature",null);
+                me.viewModel.set("currentSignatureReason",null);
+                
                 //Get Odometer from Geography
                 me.viewModel.set("currentOdometer",me.viewModel.getOdometerFromGeography());
                 kendoApp.navigate("#performPickupView");
                 
-                //$("form").kendoValidator();
+                validator = $("#performPickupView").kendoValidator().data("kendoValidator");
                 $("#performQuestionView").kendoMobileModalView("close");
                 
             },
+            allowPerformPickup: false,
             navigateNoShow: function(e){
                 me.viewModel.set("allowPerformNoShow",false);
                 var job = me.viewModel.get("job");
@@ -337,6 +379,7 @@ function (communicationManager,geographyController,utilities) {
                 kendoApp.navigate("#performNoShowView");
                 $("#performQuestionView").kendoMobileModalView("close");
                 $("#noShowReasons > div").toggleClass("active",false);
+                validator = $("#performNoShowView").kendoValidator().data("kendoValidator");
                 
             },
             viewButtonClick: function(e){

@@ -50,6 +50,9 @@ function (communicationManager,routeController,geographyController,messagesContr
             exitApp: function(){
                 navigator.app.exitApp(); 
             },
+            editSettings: function(){              
+                $("#settingsView").kendoMobileModalView("open");  
+            },
             login: function() {
                 kendoApp.showLoading();
             	var credentials = me.viewModel.get("credentials");

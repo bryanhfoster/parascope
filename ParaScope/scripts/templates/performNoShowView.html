@@ -30,14 +30,16 @@
                     <!-- start: odometer -->
                     <div class="body-row">
 
-                        <label>Odometer</label>
+                        <label>
+                            Odometer <span class="k-invalid-msg danger" data-for="odometer"></span> 
+                        </label>
                         <div class="input-group">
                             <span class="input-group-btn">
                                 <div class="btn btn-default btn-xlg" data-bind="click: decrementField" data-field="currentOdometer">
                                     <i class="icon-minus"></i>
                                 </div>
                             </span>
-                            <input class="form-control input-lg" type="number" data-bind="value: currentOdometer" />
+                            <input class="form-control input-lg" type="number" data-bind="value: currentOdometer" name="odometer" validationMessage="* required" required />
                             <span class="input-group-btn">
                                 <div class="btn btn-default btn-xlg" data-bind="click: incrementField" data-field="currentOdometer">
                                     <i class="icon-plus"></i>

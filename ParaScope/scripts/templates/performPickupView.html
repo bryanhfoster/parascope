@@ -38,6 +38,7 @@
             </div>
             <div class="body-row">
                 <div class="btn btn-default btn-lg" data-bind="click: captureSignatureClick">Capture Signature</div><br/>
+                <label data-bind="text: currentSignatureReason"></label>
                 <img data-bind="visible: showSignature, attr: { src: signature }" style="width:90%;" />
             </div>
         </div>
@@ -70,13 +71,15 @@
                     <!-- start: fare -->
                      <div class="body-row">                          
                         
-                         <label>Fare Collected</label>
+                         <label>
+                             Fare Collected <span class="k-invalid-msg danger" data-for="fare"></span>                             
+                         </label>
                          
                          <div class="input-group">
                           <span class="input-group-btn">
                               <div class="btn btn-default btn-xlg" data-bind="click: decrementField" data-field="job.RideFare"><i class="icon-minus"></i></div>
                          </span>
-                          <input class="form-control input-lg" type="number" data-bind="value: job.RideFare" />
+                          <input class="form-control input-lg" type="number" data-bind="value: job.RideFare" name="fare" validationMessage="* required" required />
                           <span class="input-group-btn">
                               <div class="btn btn-default btn-xlg" data-bind="click: incrementField" data-field="job.RideFare"><i class="icon-plus"></i></div>  
                          </span>
@@ -88,13 +91,15 @@
                     <!-- start: children -->
                      <div class="body-row">                          
                         
-                         <label>Number of Children</label>
+                         <label>
+                             Number of Children <span class="k-invalid-msg danger" data-for="wontletmenameitchildren"></span>                             
+                         </label>
                          
                          <div class="input-group">
                           <span class="input-group-btn">
                               <div class="btn btn-default btn-xlg" data-bind="click: decrementField" data-field="job.NumberOfChildren"><i class="icon-minus"></i></div>
                          </span>
-                          <input class="form-control input-lg" type="number" data-bind="value: job.NumberOfChildren" />
+                          <input class="form-control input-lg" type="number" data-bind="value: job.NumberOfChildren" name="wontletmenameitchildren" validationMessage="* required" required />
                           <span class="input-group-btn">
                               <div class="btn btn-default btn-xlg" data-bind="click: incrementField" data-field="job.NumberOfChildren"><i class="icon-plus"></i></div>  
                          </span>
@@ -107,13 +112,15 @@
                     <!-- start: escorts -->
                      <div class="body-row">                          
                         
-                         <label>Number Of Escorts</label>
+                         <label>
+                             Number Of Escorts <span class="k-invalid-msg danger" data-for="escorts"></span>
+                         </label>
                          
                          <div class="input-group">
                           <span class="input-group-btn">
                               <div class="btn btn-default btn-xlg" data-bind="click: decrementField" data-field=" job.Escorts"><i class="icon-minus"></i></div>
                          </span>
-                          <input class="form-control input-lg" type="number" data-bind="value: job.Escorts" />
+                          <input class="form-control input-lg" type="number" data-bind="value: job.Escorts" name="escorts" validationMessage="* required" required  />
                           <span class="input-group-btn">
                               <div class="btn btn-default btn-xlg" data-bind="click: incrementField" data-field="job.Escorts"><i class="icon-plus"></i></div>  
                          </span>
@@ -127,7 +134,8 @@
                     <div class="submit-row">
                         <div class="btn-group btn-group-justified">
                             
-                            <div style="width:70%" class="btn btn-success btn-xlg" data-bind="click: performPickup">Confirm Pickup</div>
+                            <div style="width:70%" class="btn btn-success btn-xlg" 
+                                data-bind="click: performPickup, enabled: allowPerformPickup, text:pickupPerformButtonText"></div>
                             <div style="width:15%" class="btn btn-default btn-xlg" data-bind="click:cancelPerform"><i class="icon-remove"></i></div>
     
                         </div>

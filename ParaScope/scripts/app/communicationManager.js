@@ -357,8 +357,20 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
             var jobPerform = {FareCollected:null,JobType:jobType,NoShowReason:noShowReason,NumberOfChildren:null,NumberOfEscorts:null,NumberOfPasses:null,OccuranceDateJson:utilities.getCurrentUTC(),RideId:rideId,Odometer:odometer};
             me.addJobPerform(jobPerform);
         },
-        addJobPerformPickup: function(rideId, fareCollected, jobType, numberOfChildren, numberOfEscorts, numberOfPasses, odometer, signature){
-            var jobPerform = {FareCollected:fareCollected,JobType:jobType,NoShowReason:null,NumberOfChildren:numberOfChildren,NumberOfEscorts:numberOfEscorts,NumberOfPasses:numberOfPasses,OccuranceDateJson:utilities.getCurrentUTC(),RideId:rideId,Odometer:odometer, Signature:signature};            
+        addJobPerformPickup: function(rideId, fareCollected, jobType, numberOfChildren, numberOfEscorts, 
+        								numberOfPasses, odometer, signature, signatureReason){
+            var jobPerform = {
+                FareCollected:fareCollected,
+                JobType:jobType,
+                NoShowReason:null,
+                NumberOfChildren:numberOfChildren,
+                NumberOfEscorts:numberOfEscorts,
+                NumberOfPasses:numberOfPasses,
+                OccuranceDateJson:utilities.getCurrentUTC(),
+                RideId:rideId,Odometer:odometer, 
+                Signature:signature, 
+                SignatureReason:signatureReason
+            };            
             me.addJobPerform(jobPerform);
         },
         addJobPerformDropoff: function(rideId, odometer, jobType){
