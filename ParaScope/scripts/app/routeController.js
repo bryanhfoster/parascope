@@ -244,7 +244,7 @@ function (communicationManager,geographyController,utilities) {
                 kendoApp.navigate("#captureSignatureView");
                 
                 canvas.width = $("#canvasContainer").width()-50;
-                canvas.height = 200;//$(window).height()- 100;
+                canvas.height = 180;//$(window).height()- 100;
             },
             cancelCaptureSignature: function(e){
                 var job = me.viewModel.get("job");
