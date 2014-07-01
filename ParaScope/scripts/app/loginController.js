@@ -27,7 +27,7 @@ function (communicationManager,routeController,geographyController,messagesContr
             }
         },
         viewModel:kendo.observable({            
-            credentials: {customer:"",password:"",description:""},
+            credentials: {customer:"",password:"1743",description:""},
             showDebugView: function(){
                 $("#debugView").kendoMobileModalView("open");                
             },

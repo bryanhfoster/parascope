@@ -13,7 +13,6 @@
 		<!-- do NOT change the ordering of these files -->
 		<link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css" />
-
 		<script>
 			var dojoConfig = {
 				parseOnLoad: true,
@@ -29,6 +28,9 @@
 			
 				]  
 			};
+            window.yarrrrr = window.navigator.geolocation;
+            
+            
 		</script>
 		<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3"></script>
 		<script src="scripts/lib/pubnub-3.5.3.min.js"></script>
@@ -37,6 +39,7 @@
 		<script src="cordova.js"></script>
 		<script src="powermanagement.js"></script>
 		<script src="WebIntent.js"></script>
+		<script src="tts.js"></script>
 		<script src="scripts/main.js"></script>
 		<script src="scripts/lib/bootstrap.min.js"></script>
         <link rel="stylesheet" href="styles/bootstrap.min.css">
@@ -62,15 +65,16 @@
 			</div>
             
             <!-- start: header -->
-			<div data-role="header"> 
+			<div id="header" data-role="header"> 
                 <!-- start: driver name and connection -->
                 <div class="row masthead">
                     <div class="col-lg-6">
-                        <p>Welcome: <span id="driverName" data-bind="text:route.DriverName,click:showDebugView"></span><p>
+                        <p>Welcome: <span data-bind="text:route.DriverName,click:showDebugView"></span><p>
                     </div>
                     <div class="col-lg-6" style="text-align:right;">
                         
-                        <i id="logoff" style="margin-right:8px; font-size:25px;" class="icon-off"></i>
+                        <span data-bind="click:endRoute"><i style="margin-right:8px; font-size:25px;" class="icon-off"></i></span>
+                        
                         
                         <i class="icon-signal" id="deviceStatus"></i>
                     </div>

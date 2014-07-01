@@ -120,7 +120,7 @@ function (communicationManager,geographyController,utilities) {
                 $("#endRouteView").kendoMobileModalView("close");
             },
             endRoute: function(){
-                if (!validator.validate()) {
+                if (validator && !validator.validate()) {
                    return;
                 }
                 me.viewModel.set("route", null);
@@ -460,7 +460,7 @@ function (communicationManager,geographyController,utilities) {
         }
     };
     
-    kendo.bind($("#driverName"),me.viewModel);
+    kendo.bind($("#header"),me.viewModel);
     
     return me;
     

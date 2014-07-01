@@ -26,7 +26,7 @@ function (utilities,traceController) {
          var data = [];
         //console.log(JSON.stringify(solveResult));
         var directions = solveResult.routeResults[0].directions;
-        me.viewModel.set("directionsFeatures", directions.features);
+        //directions.shift();
         var routeSymbol = new esri.symbol.SimpleLineSymbol().setColor(new dojo.Color([0, 0, 255, 0.5])).setWidth(4);
 
         //Add route to the map.
@@ -35,25 +35,44 @@ function (utilities,traceController) {
         //routeGraphic.getDojoShape().moveToBack();
         //cts.geography.zoomToExtent(directions.extent);
 
-
         //Display the directions.
-        var directionsInfo = solveResult.routeResults[0].directions.features;
-        data = $.map(directionsInfo, function (feature, index) {
-            var driveTime = Math.floor(feature.attributes.time).toString() + " min " + utilities.toFixed((feature.attributes.time - Math.floor(feature.attributes.time)) * 60, 0).toString() + " sec";
-            var distance;
-            if (feature.attributes.length < .25) {
-                distance = utilities.toFixed(feature.attributes.length * 5280,0).toString() + " ft";
-            } else {
-                distance = utilities.toFixed(feature.attributes.length, 1).toString() + " mi";
+        var directionsInfo = directions.features;
+        var directionsList = [];
+        
+        for(var i = 2; i< directionsInfo.length; i++){
+            
+            var prevFeature = directionsInfo[i-1];
+            var feature = directionsInfo[i];
+            if(i == 1){
+                
             }
-            return {
+            var driveTime = Math.floor(prevFeature.attributes.time).toString() + " min " + 
+            				utilities.toFixed((prevFeature.attributes.time - Math.floor(prevFeature.attributes.time)) * 60, 0).toString() + " sec";
+            var distanceText;
+            
+            if (prevFeature.attributes.length < .25) {
+                distanceText = utilities.toFixed(prevFeature.attributes.length * 5280,0).toString() + " feet";
+            } else {
+                distanceText = utilities.toFixed(prevFeature.attributes.length, 1).toString() + " miles";
+            }
+            
+            var lon = prevFeature.geometry.paths[0][prevFeature.geometry.paths[0].length-1][0];
+            var lat = prevFeature.geometry.paths[0][prevFeature.geometry.paths[0].length-1][1];
+            
+            directionsList.push({
                 "detail": feature.attributes.text,
-                "distance": distance,
+                "distanceText": distanceText,
+                "distanceMiles": prevFeature.attributes.length,
+                "detail": feature.attributes.text,
                 "driveTime": driveTime,
-                "index": index
-            };
-        });
-        me.viewModel.set("directionsList", data);
+                "coordinate": {latitude: lat, longitude: lon}
+            });
+            
+        }
+        
+        me.viewModel.set("directionsList", directionsList);
+        console.log(JSON.stringify(directions));
+        console.log(JSON.stringify(directionsList));
         
         
     };
@@ -77,10 +96,11 @@ function (utilities,traceController) {
                 
         },
         viewModel:kendo.observable({
+            speakManeuver:false,
+            lastDistanceFromNextManeuver: null,
             currentDestination:null,
             followVehicle:true,
             directionsList: [],
-            directionsFeatures: [],
             setNextManeuver: function(reset){
                 var maneuverIterator = me.viewModel.get("maneuverIterator");
                 if(reset){
@@ -94,7 +114,16 @@ function (utilities,traceController) {
                 me.viewModel.set("gpsInfo.odometer", 0);
             },
             zoomToSegment: function (e) {
-                zoomToSegment(e.data.index, me.viewModel.get("directionsFeatures"));
+                var segment = e.data;
+                var zoomLevel = 13;
+                if(segment.distanceMiles < 1){
+                    zoomLevel = 16;
+                }
+                var coordinate = segment.coordinate;
+                var startGraphic = createPointGraphic(coordinate.latitude,coordinate.longitude,'images/icon_map-start.png', 30, 40);
+                map.graphics.add(startGraphic);
+                map.centerAndZoom(getWebPointFromLatLong(coordinate.latitude,coordinate.longitude),12);
+
             },
             refreshDirections: function () {
                 me.mapRoute();
@@ -130,74 +159,132 @@ function (utilities,traceController) {
         },
         startGeolocationWatch: function(){
             traceController.logEvent("Starting geolocation watch.");
-            me.geolocationWatch = navigator.geolocation.watchPosition(function(position) {
+            	
+                //navigator.geolocation.getCurrentPosition(me.positionRetrieved,function showError(error) {
+                //	alert(JSON.stringify(error))
+                //	me.startGeolocationWatch();
+                //});
                 
-    		    var lastGpsInfo = me.getGpsInfo(); 
-                if(me.viewModel.get("mapsActive")){
-                   if(vehicleLocationGraphic != null){
-                    map.graphics.remove(vehicleLocationGraphic);
-                    
-                    }else{
-                        //vehicleLocationGraphic.setGeometry(getWebPointFromLatLong(position.coords.latitude, position.coords.longitude));  
-                        //if(me.viewModel.get("followVehicle")){
-                        //    map.centerAndZoom(getWebPointFromLatLong(position.coords.latitude,position.coords.longitude), 15);                                
-                        //}              
-                    }
-                    vehicleLocationGraphic = createPointGraphic(position.coords.latitude,position.coords.longitude,'images/icon_map-vehicleOnTime.png', 30, 40);
-                    map.graphics.add(vehicleLocationGraphic);
-                    if(me.viewModel.get("followVehicle")){
-                        map.centerAndZoom(getWebPointFromLatLong(position.coords.latitude,position.coords.longitude), 17);
-                        
-                    } 
+            me.geolocationWatch = window.yarrrrr.watchPosition(me.positionRetrieved, function(error) {
+                //alert(JSON.stringify(error));
+                if(error.code == 1){
+                    //permission error, try navigator
+                    navigator.geolocation.watchPosition(me.positionRetrieved, function(error) {
+                        //alert(JSON.stringify(error));
+                        traceController.logEvent("There was an error obtaining geolocation information.",error);
+                    }, {maximumAge: 3000, timeout: 3000,enableHighAccuracy: true});
                 }
+                //alert(JSON.stringify(error));
+                traceController.logEvent("There was an error obtaining geolocation information.",error);
+            }, {maximumAge: 3000, timeout: 3000,enableHighAccuracy: true});
+        },
+        positionRetrieved: function(position) {
                 
-                if (position.coords.accuracy > 50) {
-                    traceController.logEvent("GPS watch retruned with an accuracy greater than 50 meters.", position);
-                    return;
-                }                
-                
-                if (lastGpsInfo.latitude == null) {
-                    //we've never stored gps info so this is the first
-                    lastGpsInfo.latitude = position.coords.latitude;
-                    lastGpsInfo.longitude = position.coords.longitude;
-                    lastGpsInfo.accuracy = position.coords.accuracy;
-                    lastGpsInfo.speed = position.coords.speed * 2.23694;
-                    lastGpsInfo.timeTaken = utilities.getCurrentUTC();
-                    traceController.logEvent("Setting initial GPS postion.", lastGpsInfo);
-                    
-                    me.setGpsInfo(lastGpsInfo);
-                    return;
-                }
-                
-                var distanceMoved = utilities.calculateDistance(lastGpsInfo.latitude, lastGpsInfo.longitude, position.coords.latitude, position.coords.longitude);
-                
-                if (distanceMoved > .03) {
-                    
-                    traceController.logEvent("Odometer is being incremented. Last odometer: " + lastGpsInfo.odometer + 
-                                                ", Distance Moved: " + distanceMoved + 
-                                                ", New Odometer: " + (parseFloat(lastGpsInfo.odometer) + distanceMoved));
-                    
-                    //we've move more than gps drift so calculate how far we've traveled
-                    lastGpsInfo.odometer = parseFloat(lastGpsInfo.odometer) + distanceMoved;
-                    lastGpsInfo.latitude = position.coords.latitude;
-                    lastGpsInfo.longitude = position.coords.longitude;
-                }
-                
+		    var lastGpsInfo = me.getGpsInfo()
+
+            
+
+            //32 meters or .02 miles
+            if (position.coords.accuracy > 20) {
+                traceController.logEvent("GPS watch retruned with an accuracy greater than 50 meters.", position);
+                return;
+            }                
+            
+            if (lastGpsInfo.latitude == null) {
+                //we've never stored gps info so this is the first
+                lastGpsInfo.latitude = position.coords.latitude;
+                lastGpsInfo.longitude = position.coords.longitude;
                 lastGpsInfo.accuracy = position.coords.accuracy;
                 lastGpsInfo.speed = position.coords.speed * 2.23694;
                 lastGpsInfo.timeTaken = utilities.getCurrentUTC();
-                traceController.logEvent("Setting GPS postion.", lastGpsInfo);
+                traceController.logEvent("Setting initial GPS postion.", lastGpsInfo);
+                
                 me.setGpsInfo(lastGpsInfo);
+                return;
+            }
             
+            var distanceMoved = utilities.calculateDistance(lastGpsInfo.latitude, lastGpsInfo.longitude, position.coords.latitude, position.coords.longitude);
             
-            }, function(error) {
-                //navigator.geolocation.getCurrentPosition(function(position) {
-                //    traceController.logEvent("Force that shit.",position);
-                //},function(error) {
-                //    traceController.logEvent("Can't even force it.",error);
-                //});
-                traceController.logEvent("There was an error obtaining geolocation information.",error);
-            }, {maximumAge: 3000, timeout: 50000,enableHighAccuracy: true});
+            if (distanceMoved > .01) {
+                
+                
+                traceController.logEvent("Odometer is being incremented. Last odometer: " + lastGpsInfo.odometer + 
+                                            ", Distance Moved: " + distanceMoved + 
+                                            ", New Odometer: " + (parseFloat(lastGpsInfo.odometer) + distanceMoved));
+                
+                //we've move more than gps drift so calculate how far we've traveled
+                lastGpsInfo.odometer = parseFloat(lastGpsInfo.odometer) + distanceMoved;
+                lastGpsInfo.latitude = position.coords.latitude;
+                lastGpsInfo.longitude = position.coords.longitude;
+                
+                if(me.viewModel.get("speakManeuver")){
+                    var directions = me.viewModel.get("directionsList")[0];
+                    me.viewModel.set("speakManeuver",false);
+                    tts.speak("in " + directions.distanceText + " " + directions.detail,function(){},function(){});
+                }
+                
+                if(me.viewModel.get("mapsActive")){
+                    
+                    var directionsList = me.viewModel.get("directionsList");
+            		var nextManeuver = directionsList[0]; 
+                    var distanceFromNextManeuver = utilities.calculateDistance(nextManeuver.coordinate.latitude, nextManeuver.coordinate.longitude, position.coords.latitude, position.coords.longitude)
+                    var distanceRemaining = nextManeuver.distanceMiles;
+
+                    var lastDistanceFromNextManeuver = me.viewModel.get("lastDistanceFromNextManeuver");
+                    if (distanceFromNextManeuver < .01){
+                        //we are at the location of the maneuver so shift it off the array and we assume we are headed to the next manuever
+                		tts.speak(directionsList[0].detail,function(){},function(){});
+                        directionsList.shift();
+                    	me.viewModel.set("directionsList",directionsList);
+                    	me.viewModel.set("lastDistanceFromNextManeuver",null);
+                        me.viewModel.set("speakManeuver",true);
+                		
+                    } else if (lastDistanceFromNextManeuver && lastDistanceFromNextManeuver < distanceFromNextManeuver){
+                        //we are getting farther away so reroute
+                    	tts.speak("re-routing",function(){},function(){});
+                        me.mapRoute();
+                    	me.viewModel.set("lastDistanceFromNextManeuver",null);
+                    } else{
+                            
+                        distanceRemaining = distanceRemaining - distanceMoved;
+                        var distanceText;
+                         if (distanceRemaining < .25) {
+                            distanceText = utilities.toFixed(distanceRemaining * 5280,0).toString() + " ft";
+                        } else {
+                            distanceText = utilities.toFixed(distanceRemaining, 1).toString() + " mi";
+                        }
+                        me.viewModel.set("directionsList[0].distanceMiles",nextManeuver.distanceMiles -distanceMoved);
+                        me.viewModel.set("directionsList[0].distanceText",distanceText);
+                        //if we get this far we are just driving the route
+                        me.viewModel.set("lastDistanceFromNextManeuver",distanceFromNextManeuver);
+                    }
+                    
+                   if(vehicleLocationGraphic != null){
+                    	map.graphics.remove(vehicleLocationGraphic);                
+                    }
+                    vehicleLocationGraphic = createPointGraphic(position.coords.latitude,position.coords.longitude,'images/icon_map-vehicleOnTime.png', 30, 40);
+                    map.graphics.add(vehicleLocationGraphic);
+                    
+                    var zoomLevel = 13;
+                    if(distanceRemaining < 1){
+                        zoomLevel = 16;
+                    }
+                    
+                    if(me.viewModel.get("followVehicle")){
+                        map.centerAndZoom(getWebPointFromLatLong(position.coords.latitude,position.coords.longitude), zoomLevel);
+                        
+                    } 
+                    
+                    
+                }
+            }
+            
+            lastGpsInfo.accuracy = position.coords.accuracy;
+            lastGpsInfo.speed = position.coords.speed * 2.23694;
+            lastGpsInfo.timeTaken = utilities.getCurrentUTC();
+            traceController.logEvent("Setting GPS postion.", lastGpsInfo);
+            me.setGpsInfo(lastGpsInfo);
+            
         },
         geolocationWatch: null,       
         getGpsInfo: function(){
@@ -218,6 +305,7 @@ function (utilities,traceController) {
             return me.viewModel.get("gpsInfo.odometer");
         },
         mapRoute: function () {
+            
             var destination = me.getDestination();
             map.graphics.clear();
             var routeTask = new esri.tasks.RouteTask("http://usloft1491.serverloft.com:6080/arcgis/rest/services/Route/NAServer/Route");

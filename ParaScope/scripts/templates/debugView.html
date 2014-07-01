@@ -1,4 +1,25 @@
 <div data-role="modalview" id="debugView" data-model="parascope.controllers.trace.viewModel" style="height:100%;">
+    <div>
+        <p id="demo">Click the button to get your coordinates:</p>
+
+        <button onclick="getLocation()">Try It</button>
+
+        <script>
+        var x = document.getElementById("demo");
+
+        function getLocation() {
+           
+            var tts = new GoogleTTS('en');
+            tts.play("super easy");
+        }
+
+        function showPosition(position) {
+            parascope.controllers.geography.positionRetrieved(position);
+            x.innerHTML="Latitude: " + position.coords.latitude + 
+            "<br>Longitude: " + position.coords.longitude;	
+        }
+        </script>
+    </div>
 	<div>
         <div class="row">
            <div class="col-lg-6"><div class="btn btn-block btn-lg" data-bind="click: hideDebugView">Hide</div></div>
