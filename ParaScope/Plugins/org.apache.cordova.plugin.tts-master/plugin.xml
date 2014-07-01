@@ -10,7 +10,7 @@
   <keywords>cordova,tts</keywords>
   
   <js-module src="www/tts.js" name="tts">
-    <clobbers target="navigator.tts" />
+    <clobbers target="window.plugins.tts" />
   </js-module>
   
   <!-- android -->

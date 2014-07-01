@@ -220,7 +220,7 @@ function (utilities,traceController) {
                 if(me.viewModel.get("speakManeuver")){
                     var directions = me.viewModel.get("directionsList")[0];
                     me.viewModel.set("speakManeuver",false);
-                    tts.speak("in " + directions.distanceText + " " + directions.detail,function(){},function(){});
+                    window.plugins.tts.speak("in " + directions.distanceText + " " + directions.detail,function(){},function(){});
                 }
                 
                 if(me.viewModel.get("mapsActive")){
@@ -241,7 +241,7 @@ function (utilities,traceController) {
                 		
                     } else if (lastDistanceFromNextManeuver && lastDistanceFromNextManeuver < distanceFromNextManeuver){
                         //we are getting farther away so reroute
-                    	tts.speak("re-routing",function(){},function(){});
+                    	window.plugins.tts.speak("re-routing",function(){},function(){});
                         me.mapRoute();
                     	me.viewModel.set("lastDistanceFromNextManeuver",null);
                     } else{

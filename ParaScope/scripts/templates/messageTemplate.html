@@ -8,12 +8,12 @@
         </div>      
         <div class="col-lg-4">
             #if(Answered || MessageResponseType == 1){#
-                <div class="btn btn-primary btn-xlg" data-bind="click:messageReplyClick">Dismiss</div>
+                <div class="btn btn-primary btn-responsive" data-bind="click:messageReplyClick">Dismiss</div>
             #}else if(MessageResponseType == 2){#
-                <div class="btn btn-primary btn-xlg" data-bind="click:messageReplyClick">Yes</div>
-                <div class="btn btn-primary btn-xlg" data-bind="click:messageReplyClick">No</div>
+                <div class="btn btn-primary btn-responsive" data-bind="click:messageReplyClick">Yes</div>
+                <div class="btn btn-primary btn-responsive" data-bind="click:messageReplyClick">No</div>
             #}else if(MessageResponseType == 3){#
-                <div class="btn btn-primary btn-xlg" data-bind="click:messageReplyClick">Acknowledge</div>
+                <div class="btn btn-primary btn-responsive" data-bind="click:messageReplyClick">Acknowledge</div>
             #}#
         </div>        
     </div>      

@@ -1,114 +1,163 @@
-html, body {
-  height: 100%;
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
+html, body
+{
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
 }
-.k-invalid-msg{
+.row{
+   margin:0px;
+}
+
+.k-invalid-msg
+{
     color: Red;
 }
 /*set global bg color and image*/
-body, .km-flat, .km-flat .km-navbar, .km-flat .km-content {background:#fff url(../images/bg.jpg) 50% 0 no-repeat;}
+body, .km-flat, .km-flat .km-navbar, .km-flat .km-content { background: #fff url(../images/bg.jpg) 50% 0 no-repeat; }
 
-a:hover{text-decoration:none;}
+a:hover { text-decoration: none; }
 
-h1, h2, h3, h4, h5, h6 { /*reset for mobile browsers */
-		font-weight: normal;
-	}
+@media (max-width: 769px)
+{
+    h1
+    {
+        font-family: "lato_lightregular", Helvetica, Arial, sans-serif;
+        font-size: 30px; color: #46b8da; text-shadow: #fff 1px 1px 0;
+    }
+    .modal h1 { font: 26px "lato_blackregular"; color: #333; }
 	
-	h1 {
-		font-family:"lato_lightregular", Helvetica, Arial, sans-serif;
-		font-size:46px; color:#46b8da; text-shadow:#fff 1px 1px 0;
-	}
-		.modal h1 {font: 26px "lato_blackregular"; color: #333;}
+    h2
+    {
+        font: 22px "lato_blackregular"; color: #a3a3a3; margin: 6px 0;
+    }
+    h2 span { font-family: "lato_lightregular"; color: #333; }
 	
-	h2{
-		font: 32px "lato_blackregular"; color: #a3a3a3; margin:6px 0;
-	}
-	h2 span{font-family:"lato_lightregular"; color: #333;}
+    h3
+    {
+        font: 24px "lato_blackregular";
+        color: #333;
+        font-weight: normal;
+        margin: 0 0 4px 0;
+        line-height: 16px;
+    }
+}
+@media (min-width: 769px) and (max-width: 2000px)
+{
+    .btn-responsive
+    {
+        padding: 17px 24px;
+        font-size: 26px;
+        line-height: 26px;
+        border-radius: 6px;
+    }
+
+    .input-responsive
+    {
+        height: 62px;
+        font-size: 28px;
+        line-height: 26px;
+        border-radius: 6px;
+    }
+    h1
+{
+    font-family: "lato_lightregular", Helvetica, Arial, sans-serif;
+    font-size: 46px; color: #46b8da; text-shadow: #fff 1px 1px 0;
+}
+.modal h1 { font: 26px "lato_blackregular"; color: #333; }
 	
-	h3 {
-		font: 24px "lato_blackregular";
-		color: #333;
-		font-weight: normal;
-		margin: 0 0 4px 0;
-		line-height: 16px;
-	}	
+h2
+{
+    font: 32px "lato_blackregular"; color: #a3a3a3; margin: 6px 0;
+}
+h2 span { font-family: "lato_lightregular"; color: #333; }
 	
-	h4 {
-		font-family:"latoregular", Helvetica, Arial, sans-serif;
-		font-size:18px;
-	}
-	
-	h5 {
-		font-family:"latoregular", Helvetica, Arial, sans-serif; 
-			font-size:16px; font-weight:bold;
-	}
-	
-	h2, h3, h4, h5 {
-		text-shadow:#fff 1px 1px 0;
-	}
-.ugly {
-    font-size:25px; font-weight:bold; position:absolute; 
+h3
+{
+    font: 24px "lato_blackregular";
+    color: #333;
+    font-weight: normal;
+    margin: 0 0 4px 0;
+    line-height: 16px;
+}	
 }
 
-#mapView {
-  height:	100%;
+h1, h2, h3, h4, h5, h6
+{ /*reset for mobile browsers */
+    font-weight: normal;
+}
+	
+
+	
+h4
+{
+    font-family: "latoregular", Helvetica, Arial, sans-serif;
+    font-size: 18px;
+}
+	
+h5
+{
+    font-family: "latoregular", Helvetica, Arial, sans-serif; 
+    font-size: 16px; font-weight: bold;
+}
+	
+h2, h3, h4, h5
+{
+    text-shadow: #fff 1px 1px 0;
 }
 
-#map {
-  width:	100%;
-  height:	100%;
+#mapView
+{
+    height: 100%;
 }
-.masthead{padding:3px 0; background: rgba(57, 179, 215, 0.1) url(../images/emoticon.png) 10px 50% no-repeat; padding-left:22px}
-.masthead p{font-size:14px}
+
+#map
+{
+    width: 100%;
+    height: 100%;
+}
+.masthead { padding: 3px 0; background: rgba(57, 179, 215, 0.1) url(../images/emoticon.png) 10px 50% no-repeat; padding-left: 22px}
+.masthead p { font-size: 14px}
 
 /* =============================================
 BOOTSTRAP OVERRIDES
 ==================================================*/
-.btn-xlg {
-  padding: 17px 24px;
-  font-size: 26px;
-  line-height: 26px;
-  border-radius: 6px;
-}
 
-.input-lg {
-height: 62px;
-font-size: 28px;
-  line-height: 26px;
-  border-radius: 6px;
-}
 
-hr {
-  margin: 5px 0;
-  border: 0; width:98%;
-  border-top: 1px solid #eeeeee;
-  border-bottom: 1px solid #ffffff;
+hr
+{
+    margin: 5px 0;
+    border: 0; width: 98%;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #ffffff;
 }
 
 /* USER MESSAGE */
-#userMessage{background-color: rgba(255,255,255,.9); position:absolute; top:0; left:0; width:100%; z-index:9999;}
-    #userMessage h1 {margin:0px;}
-    #userMessage i {font-size:42px}
+#userMessage { background-color: rgba(255, 255, 255, .9); position: absolute; top: 0; left: 0; width: 100%; z-index: 9999; }
+#userMessage h1 { margin: 0px; }
+#userMessage i { font-size: 42px}
 
 /* MODALS*/
-.modalClose-row{padding:5px 10px; font-size:24px;}
-.modalClose-row h3{padding:0; margin:0;margin-top: 7px;}
-.modalClose-row > div.col-lg-9 {padding-left:0;} 
-.modalClose-row > div.col-lg-3 {padding-right:0;} 
+.modalClose-row { padding: 5px 10px; font-size: 24px; }
+.modalClose-row h3 { padding: 0; margin: 0; margin-top: 7px; }
+.modalClose-row > div.col-lg-9 { padding-left: 0; } 
+.modalClose-row > div.col-lg-3 { padding-right: 0; } 
 
-.modalBody{}
-.modalBody-row{margin:0px 0px 20px 0;}
-.modalBody-row h1 {padding:0; margin:0}
+.modalBody { }
+.modalBody-row { margin: 0px 0px 20px 0; }
+.modalBody-row h1 { padding: 0; margin: 0}
 
-.modalSubmit-row{margin:40px 0 20px 0} 
+.modalSubmit-row { margin: 40px 0 20px 0} 
 
-.km-modalview-wrapper{}
+.km-modalview-wrapper { }
 
-.km-modalview-wrapper .km-modalview{    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);}
-.km-modalview-wrapper .km-modalview .km-content {
+.km-modalview-wrapper .km-modalview
+{
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+}
+.km-modalview-wrapper .km-modalview .km-content
+{
 
     position: relative;
     background-color: #ffffff;
@@ -121,68 +170,60 @@ hr {
     background-clip: padding-box;
 }
 
-
-.controls-row{padding:10px}
+.controls-row { padding: 10px}
 /* =============================================
 INDIVIDUAL PAGE STYLES
 ==================================================*/
-     /* GENERAL*/
+/* GENERAL*/
 
-    .row-topControls{margin:0px; padding:10px}   
+.row-topControls { margin: 0px; padding: 10px}   
     
-    .body-row{margin:0px 0px 20px 0;}
-        .body-row h1 {padding:0; margin:0}
+.body-row { margin: 0px 0px 20px 0; }
+.body-row h1 { padding: 0; margin: 0}
     
-    .submit-row{margin:40px 0 20px 0} 
-
     
-    /* LOGIN VIEW*/
-    #loginView > .km-content{} /*pade bg*/
-    #loginView .row{padding-top:25px}
-    #loginView img{margin:0 0 40px 52px}
+/* LOGIN VIEW*/
+#loginView > .km-content { } /*pade bg*/
+#loginView .row { padding-top: 25px}
+#loginView img { margin: 0 0 40px 0}
 
+/* INDEX*/
+.connection { float: right; margin: 5px; }
+.connection > i { font-size: 24px}
 
+/* HEADER*/
+div[data-role='header'] { }
+div[data-role='header'] .alert { margin: 0px; }    
 
-    /* INDEX*/
-   .connection{float:right; margin:5px;}
-       .connection > i {font-size:24px}
+/* ROUTE VIEW*/
+#routeView { }
+#routeView .btn-success.btn-lg, #routeView .btn-danger.btn-lg { margin-left: 1rem; margin-right: 1rem; }
 
-    /* HEADER*/
-    div[data-role='header']{}
-    div[data-role='header'] .alert {margin:0px;}    
+#jobList li { border: none!important; border-bottom: 2px dotted #ccc!important; padding: 20px 0; }
 
-    /* ROUTE VIEW*/
-    #routeView{}
-    #routeView .btn-success.btn-lg, #routeView .btn-danger.btn-lg {margin-left: 1rem;margin-right: 1rem;}
+.jobType { }
 
-    #jobList li{border:none!important; border-bottom: 2px dotted #ccc!important; padding:20px 0;}
+/* PREDEFINED MESSAGES VIEW*/    
+#predefinedMessageView { }
+#predefinedMessageView ul li { padding: 0px; border: none}
+#predefinedMessageView ul li button { margin-bottom: 12px}
 
-    .jobType{}
-
-    /* PREDEFINED MESSAGES VIEW*/    
-    #predefinedMessageView{}
-    #predefinedMessageView ul li {padding:0px; border:none}
-    #predefinedMessageView ul li button {margin-bottom:12px}
-
-    /* PERFORM PICKUP VIEW*/  
-    #performPickupView{}
+/* PERFORM PICKUP VIEW*/  
+#performPickupView { }
 
 /* =============================================
 KENDO OVERRIDES
 ==================================================*/
-.km-flat .km-loader, .km-flat .km-rowinsert, .km-flat .km-state-active, .km-flat .km-scroller-pull, .km-flat .k-slider-selection, .km-flat .km-touch-scrollbar, .km-flat .km-pages .km-current-page, .km-flat .k-slider .k-draghandle, .km-flat .k-slider .k-draghandle:hover, .km-flat .km-tabstrip .km-state-active, .km-flat .km-scroller-refresh.km-load-more, .km-flat .km-popup .k-state-hover, .km-flat .km-popup .k-state-focused, .km-flat .km-popup .k-state-selected, .km-flat .km-actionsheet>li>a:active, .km-flat .km-actionsheet>li>a:hover, .km-flat li.km-state-active .km-listview-link, .km-flat li.km-state-active .km-listview-label, .km-flat .km-listview-label input[type=radio]:checked, .km-flat .km-listview-label input[type=checkbox]:checked {
-background: #39b3d7;
+.km-flat .km-loader, .km-flat .km-rowinsert, .km-flat .km-state-active, .km-flat .km-scroller-pull, .km-flat .k-slider-selection, .km-flat .km-touch-scrollbar, .km-flat .km-pages .km-current-page, .km-flat .k-slider .k-draghandle, .km-flat .k-slider .k-draghandle:hover, .km-flat .km-tabstrip .km-state-active, .km-flat .km-scroller-refresh.km-load-more, .km-flat .km-popup .k-state-hover, .km-flat .km-popup .k-state-focused, .km-flat .km-popup .k-state-selected, .km-flat .km-actionsheet>li>a:active, .km-flat .km-actionsheet>li>a:hover, .km-flat li.km-state-active .km-listview-link, .km-flat li.km-state-active .km-listview-label, .km-flat .km-listview-label input[type=radio]:checked, .km-flat .km-listview-label input[type=checkbox]:checked
+{
+    background: #39b3d7;
 }
 
-.km-flat .km-list>li {
-background:none;
-border: 1px solid rgba(0,0,0,0.1);
-border-width: 0 0 1px 0;
-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
--webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+.km-flat .km-list>li
+{
+    background: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-width: 0 0 1px 0;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
-
-
-
-
-

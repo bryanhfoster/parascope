@@ -28,13 +28,13 @@
                         </label>
                         <div class="input-group">
                             <span class="input-group-btn">
-                                <div class="btn btn-default btn-xlg" data-bind="click: decrementField" data-field="route.ExpectedRouteStartOdometer">
+                                <div class="btn btn-default btn-responsive" data-bind="click: decrementField" data-field="route.ExpectedRouteStartOdometer">
                                     <i class="icon-minus"></i>
                                 </div>
                             </span>
-                            <input class="form-control input-lg" type="number" data-bind="value: route.ExpectedRouteStartOdometer" name="odometer" validationMessage="* required" required />
+                            <input class="form-control input-responsive" type="number" data-bind="value: route.ExpectedRouteStartOdometer" name="odometer" validationMessage="* required" required />
                             <span class="input-group-btn">
-                                <div class="btn btn-default btn-xlg" data-bind="click: incrementField" data-field="route.ExpectedRouteStartOdometer">
+                                <div class="btn btn-default btn-responsive" data-bind="click: incrementField" data-field="route.ExpectedRouteStartOdometer">
                                     <i class="icon-plus"></i>
                                 </div>
                             </span>
@@ -43,10 +43,10 @@
                     
                     <div class="form-group">
                         <label>Vehicle Number</label>
-                        <input type="text" class=" input-lg form-control" data-bind="value: route.VehicleNumber" readonly="true" />
+                        <input type="text" class=" input-responsive form-control" data-bind="value: route.VehicleNumber" readonly="true" />
                     </div>
                     
-                    <div class="btn btn-primary btn-block btn-xlg" data-bind="click: startRoute">Submit</div>
+                    <div class="btn btn-primary btn-block btn-responsive" data-bind="click: startRoute">Submit</div>
                   
                 </fieldset>
     	    </form>            

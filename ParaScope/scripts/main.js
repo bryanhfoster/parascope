@@ -15,7 +15,7 @@ dojo.addOnLoad(function(){
                 parascope.init();
             })
             document.addEventListener("backbutton", function(e){
-                if(kendoApp.view().id != "loginView"){
+                if(kendoApp.view().id != "#loginView"){
                 	kendoApp.navigate("#routeView");                    
                 }   			
 			});

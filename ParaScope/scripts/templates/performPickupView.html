@@ -13,7 +13,7 @@
     
     <div class="row" style="padding-top:25px">
         
-        <div class="col-lg-6">
+        <div class="col-xs-6">
             
             <!-- start: who / where -->
             <div class="body-row">
@@ -37,13 +37,13 @@
                 <p  data-bind="text: formatCurrentJobSpecialAssistance"></p>
             </div>
             <div class="body-row">
-                <div class="btn btn-default btn-lg" data-bind="click: captureSignatureClick">Capture Signature</div><br/>
+                <div class="btn btn-default btn-responsive" data-bind="click: captureSignatureClick">Capture Signature</div><br/>
                 <label data-bind="text: currentSignatureReason"></label>
                 <img data-bind="visible: showSignature, attr: { src: signature }" style="width:90%;" />
             </div>
         </div>
         
-        <div class="col-lg-6">
+        <div class="col-xs-6">
             <form>		
                 <fieldset>
 
@@ -56,11 +56,11 @@
                         </label>
                          <div class="input-group">
                           <span class="input-group-btn">
-                              <div class="btn btn-default btn-xlg" data-bind="click: decrementField" data-field="currentOdometer"><i class="icon-minus"></i></div>
+                              <div class="btn btn-default btn-responsive" data-bind="click: decrementField" data-field="currentOdometer"><i class="icon-minus"></i></div>
                          </span>
-                          <input class="form-control input-lg" type="number" data-bind="value: currentOdometer" name="odometer" validationMessage="* required" required  />
+                          <input class="form-control input-responsive" type="number" data-bind="value: currentOdometer" name="odometer" validationMessage="* required" required  />
                           <span class="input-group-btn">
-                              <div class="btn btn-default btn-xlg" data-bind="click: incrementField" data-field="currentOdometer"><i class="icon-plus"></i></div>  
+                              <div class="btn btn-default btn-responsive" data-bind="click: incrementField" data-field="currentOdometer"><i class="icon-plus"></i></div>  
                          </span>
                              
                         </div>
@@ -77,11 +77,11 @@
                          
                          <div class="input-group">
                           <span class="input-group-btn">
-                              <div class="btn btn-default btn-xlg" data-bind="click: decrementField" data-field="job.RideFare"><i class="icon-minus"></i></div>
+                              <div class="btn btn-default btn-responsive" data-bind="click: decrementField" data-field="job.RideFare"><i class="icon-minus"></i></div>
                          </span>
-                          <input class="form-control input-lg" type="number" data-bind="value: job.RideFare" name="fare" validationMessage="* required" required />
+                          <input class="form-control input-responsive" type="number" data-bind="value: job.RideFare" name="fare" validationMessage="* required" required />
                           <span class="input-group-btn">
-                              <div class="btn btn-default btn-xlg" data-bind="click: incrementField" data-field="job.RideFare"><i class="icon-plus"></i></div>  
+                              <div class="btn btn-default btn-responsive" data-bind="click: incrementField" data-field="job.RideFare"><i class="icon-plus"></i></div>  
                          </span>
                              
                         </div>
@@ -97,11 +97,11 @@
                          
                          <div class="input-group">
                           <span class="input-group-btn">
-                              <div class="btn btn-default btn-xlg" data-bind="click: decrementField" data-field="job.NumberOfChildren"><i class="icon-minus"></i></div>
+                              <div class="btn btn-default btn-responsive" data-bind="click: decrementField" data-field="job.NumberOfChildren"><i class="icon-minus"></i></div>
                          </span>
-                          <input class="form-control input-lg" type="number" data-bind="value: job.NumberOfChildren" name="wontletmenameitchildren" validationMessage="* required" required />
+                          <input class="form-control input-responsive" type="number" data-bind="value: job.NumberOfChildren" name="wontletmenameitchildren" validationMessage="* required" required />
                           <span class="input-group-btn">
-                              <div class="btn btn-default btn-xlg" data-bind="click: incrementField" data-field="job.NumberOfChildren"><i class="icon-plus"></i></div>  
+                              <div class="btn btn-default btn-responsive" data-bind="click: incrementField" data-field="job.NumberOfChildren"><i class="icon-plus"></i></div>  
                          </span>
                              
                         </div>
@@ -118,11 +118,11 @@
                          
                          <div class="input-group">
                           <span class="input-group-btn">
-                              <div class="btn btn-default btn-xlg" data-bind="click: decrementField" data-field=" job.Escorts"><i class="icon-minus"></i></div>
+                              <div class="btn btn-default btn-responsive" data-bind="click: decrementField" data-field=" job.Escorts"><i class="icon-minus"></i></div>
                          </span>
-                          <input class="form-control input-lg" type="number" data-bind="value: job.Escorts" name="escorts" validationMessage="* required" required  />
+                          <input class="form-control input-responsive" type="number" data-bind="value: job.Escorts" name="escorts" validationMessage="* required" required  />
                           <span class="input-group-btn">
-                              <div class="btn btn-default btn-xlg" data-bind="click: incrementField" data-field="job.Escorts"><i class="icon-plus"></i></div>  
+                              <div class="btn btn-default btn-responsive" data-bind="click: incrementField" data-field="job.Escorts"><i class="icon-plus"></i></div>  
                          </span>
                              
                         </div>
@@ -134,9 +134,9 @@
                     <div class="submit-row">
                         <div class="btn-group btn-group-justified">
                             
-                            <div style="width:70%" class="btn btn-success btn-xlg" 
+                            <div style="width:80%" class="btn btn-success btn-responsive" 
                                 data-bind="click: performPickup, enabled: allowPerformPickup, text:pickupPerformButtonText"></div>
-                            <div style="width:15%" class="btn btn-default btn-xlg" data-bind="click:cancelPerform"><i class="icon-remove"></i></div>
+                            <div style="width:20%" class="btn btn-default btn-responsive" data-bind="click:cancelPerform"><i class="icon-remove"></i></div>
     
                         </div>
                     </div>

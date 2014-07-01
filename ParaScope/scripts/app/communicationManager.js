@@ -32,7 +32,7 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
                     $("div[data-role='header'] .alert").remove();   
                     
                    //inject environment message
-                    $("div[data-role='header']").append('<div class="alert alert-warning"><i class="icon-warning-sign"></i> <strong>Currently in QA Environment.</strong></div>');
+                    //$("div[data-role='header']").append('<div class="alert alert-warning"><i class="icon-warning-sign"></i> <strong>Currently in QA Environment.</strong></div>');
                     
                     
                     return customerName.replace("qa.","");
@@ -44,7 +44,7 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
                     $("div[data-role='header'] .alert").remove(); 
                     
                     //inject environment message
-                    $("div[data-role='header']").append('<div class="alert alert-warning"><i class="icon-warning-sign"></i> <strong>Currently in DEVELOPMENT Environment.</strong></div>');
+                    //$("div[data-role='header']").append('<div class="alert alert-warning"><i class="icon-warning-sign"></i> <strong>Currently in DEVELOPMENT Environment.</strong></div>');
                     
                     return customerName.replace("dev.","");                    
                 } else {

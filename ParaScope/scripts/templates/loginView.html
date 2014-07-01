@@ -1,39 +1,28 @@
 <div data-role="view" id="loginView" data-model="parascope.controllers.login.viewModel"  data-before-show="loginBeforeShow">
+    <div class="btn btn-default pull-right" data-bind="click: editSettings">Settings</div>
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-4">
+            <div style="text-align:center"><img src="images/logo.png"/></div>
+            <form>		
+                <fieldset>
+                    <div class="form-group">
 
-                        	<div class="btn btn-default pull-right" data-bind="click: editSettings">Settings</div>
-        <div class="row">
+                        <input type="number" class="form-control input-responsive" placeholder="Enter PIN" data-bind="value: credentials.password" />
+                    </div>
+                    <div class="form-group">
 
-            <div class="col-lg-4 col-lg-offset-4">
-                
-                <img src="images/logo.png"/>
-                
-                <form>		
-                    <fieldset>
-                        <div class="form-group">
+                        <input type="text" disabled="true" class="form-control input-responsive" placeholder="Customer Code"  data-bind="value: credentials.customer" />
+                    </div>
+                    <div class="form-group">
 
-                            <input type="number" class="form-control input-lg" placeholder="Enter PIN" data-bind="value: credentials.password" />
-                        </div>
-                        <div class="form-group">
-
-                            <input type="text" disabled="true" class="form-control input-lg" placeholder="Customer Code"  data-bind="value: credentials.customer" />
-                        </div>
-                        <div class="form-group">
-
-                            <input type="text" disabled="true" class="form-control input-lg" placeholder="Description"  data-bind="value: credentials.description" />
-                            
-                        </div>
-                        <div id="errorMessage" class="alert alert-danger" ></div>
-                        <div class="btn btn-success btn-block btn-xlg" data-bind="click: login">Log In</div><br>
-                        <!---<div class="btn btn-danger btn-block btn-xlg" data-bind="click: exitApp">Exit</div>--->
-                    </fieldset>
-        	    </form>            
-
-            </div>
-            
-
-            
-            
-        </div>   
-
-    
+                        <input type="text" disabled="true" class="form-control input-responsive" placeholder="Description"  data-bind="value: credentials.description" />
+                        
+                    </div>
+                    <div id="errorMessage" class="alert alert-danger" ></div>
+                    <div class="btn btn-success btn-block btn-responsive" data-bind="click: login">Log In</div><br>
+                    <!---<div class="btn btn-danger btn-block btn-responsive" data-bind="click: exitApp">Exit</div>--->
+                </fieldset>
+    	    </form>   
+        </div>
+    </div>   
 </div>

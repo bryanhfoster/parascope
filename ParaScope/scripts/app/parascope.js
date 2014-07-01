@@ -20,14 +20,13 @@ function (kendo,communicationManager,templateLoader,loginController,routeControl
                 },1000);
             });
             
-            
-            //$("#logoff").click(routeController.viewModel.endRoute);
-            
             //then if we are on a tab then activate plugins... if window.plugins is null then we are in a simulator so we skip that step so as to avoid errors
             if (window.plugins){
                 window.plugins.powerManagement.dim();
 
-                tts.startup(function(){},function(){});
+                window.plugins.tts.startup(function(){
+                    //window.plugins.tts.speak("text to speech initialized",function(){},function(){});
+                },function(){});
                 
                 //window.plugins.statusBarNotification.notify("Parascope", "Welcome!", Flag.FLAG_NO_CLEAR);
                 
