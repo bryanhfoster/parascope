@@ -1,35 +1,15 @@
-<div data-role="modalview" id="debugView" data-model="parascope.controllers.trace.viewModel" style="height:100%;">
-    <div>
-        <p id="demo">Click the button to get your coordinates:</p>
-
-        <button onclick="getLocation()">Try It</button>
-
-        <script>
-        var x = document.getElementById("demo");
-
-        function getLocation() {
-           
-            var tts = new GoogleTTS('en');
-            tts.play("super easy");
-        }
-
-        function showPosition(position) {
-            parascope.controllers.geography.positionRetrieved(position);
-            x.innerHTML="Latitude: " + position.coords.latitude + 
-            "<br>Longitude: " + position.coords.longitude;	
-        }
-        </script>
-    </div>
-	<div>
+<div data-role="modalview" id="debugView" data-model="parascope.controllers.trace.viewModel" style="width:90%; height:400px;">
+   <div data-role="header">
+       
         <div class="row">
-           <div class="col-lg-6"><div class="btn btn-block btn-lg" data-bind="click: hideDebugView">Hide</div></div>
-           <div class="col-lg-6">Send Trace To Server<input data-role="switch" data-bind="checked:sendTraceToServer"/></div>          
-        </div>        	
+           <div class="col-xs-6"><div class="btn btn-block btn-lg" data-bind="click: hideDebugView">Hide</div></div>
+           <div class="col-xs-6">Send Trace To Server<input data-role="switch" data-bind="checked:sendTraceToServer"/></div>          
+        </div>  
+   </div>      	
         	               
         <ul id="events" data-role="listview"
     		data-style="inset"
     		data-template="eventTemplate"
     		data-bind="source: events">
     	</ul>
-	</div>
 </div>

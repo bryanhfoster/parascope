@@ -1,19 +1,20 @@
-define(["app/constants","app/traceController"],
-function (constants,traceController) {
-    return {
+define(["app/constants","app/traceController","app/utilities"],
+function (constants,traceController, utilities) {
+    var me = {
         loadEmptyDriverReport: function(callback){
             $.ajax({
-                    type: "GET",
-                    cache: false,
-                    url: constants.serviceUrl + "GetEmptyDriverReport",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json"})
-                    .done(function (result) {
-                        callback(result);
-                    })
-                    .fail(function(){
-                        callback(null);
-                    });
+                type: "GET",
+                cache: false,
+                url: constants.serviceUrl + "GetEmptyDriverReport",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"})
+                .done(function (result) {
+                    callback(result);
+                })
+                .fail(function(error){
+                	me.submitErrorReport(JSON.stringify(error));
+                    callback(null);
+                });
         },
         submitDriverReport: function(driverReport,callback){
             $.ajax({
@@ -24,8 +25,9 @@ function (constants,traceController) {
                 })
                 .done(function (result) {
                     callback(result);
-                }).fail(function(result){
-                    callback(result);
+                }).fail(function(error){
+                    me.submitErrorReport(JSON.stringify(error));
+                    callback(error);
                 });
         },
         getRouteUpdate: function(deviceIdentifier,companyName,softwareVersion,callback){
@@ -38,40 +40,82 @@ function (constants,traceController) {
                 .done(function (result) {
                     callback(result);
                 })
-                .fail(function(){
+                .fail(function(error){
+                    me.submitErrorReport(JSON.stringify(error));
                     callback(null);
                 });
         },
         login: function(credentials,callback){
+           var jsonstring = JSON.stringify(credentials);
+            //jsonstring = jsonstring.substring(0, jsonstring.length - 10);
+            //debugger;
             $.ajax({
                 type: "POST",
                 url: constants.serviceUrl + "Login",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(credentials),
+                data: jsonstring,
                 dataType: "json"})
                 .done(function (result) {
                     callback(result);
                 })
                 .fail(function(error){
+                    me.submitErrorReport(JSON.stringify(error));
                     callback(null);
                 });
         },
-        getCurrentSoftwareVersion: function(callback){
+        getCurrentSoftwareVersion: function(){
+            return utilities.ajaxGet(constants.serviceUrl + "GetCurrentSoftwareVersion");
+            //$.ajax({
+            //    type: "GET",
+            //    cache: false,
+            //    url: constants.serviceUrl + "GetCurrentSoftwareVersion",
+            //    contentType: "application/json; charset=utf-8",
+            //    dataType: "json"})
+            //    .done(function (result) {
+            //        callback(result);
+            //    })
+            //    .fail(function(error){
+            //        me.submitErrorReport(JSON.stringify(error));
+            //        callback(null);
+            //    });
+        },
+        submitErrorReport: function(errorString){
+            
+            var fullReport = "PARASCOPE ERROR: ";
+            debugger;
+            try{
+                var deviceInformation = localStorage.getItem("DeviceInformation");
+                if(deviceInformation != "undefined"){
+                    
+                    var deviceInformationObject = JSON.parse(deviceInformation);
+                    
+            	    fullReport = fullReport.concat("\nCustomer: " + deviceInformationObject.Customer);
+            		fullReport = fullReport.concat("\nDeviceDescription: " + deviceInformationObject.DeviceDescription);
+            		fullReport = fullReport.concat("\nDeviceIdentifier: " + deviceInformationObject.Identifier);
+                    
+                }
+            } catch(error) {
+            	fullReport = fullReport.concat("\nError parsing device information: " + JSON.stringify(error));
+            }
+            
+			fullReport = fullReport.concat("\nError: " + errorString);
+            
             $.ajax({
-                type: "GET",
+                type: "POST",
                 cache: false,
-                url: constants.serviceUrl + "GetCurrentSoftwareVersion",
+                url: constants.serviceUrl + "submitErrorReport",
                 contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(fullReport),
                 dataType: "json"})
                 .done(function (result) {
-                    callback(result);
+                    //do nothing
                 })
                 .fail(function(error){
-                    callback(null);
+					//we must be offline, what now
                 });
         }
     };
     
-    
+    return me;    
     
 });

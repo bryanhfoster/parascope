@@ -11,17 +11,21 @@ function (communicationManager,routeController,geographyController,messagesContr
                 me.viewModel.set("credentials.description",deviceInformation.DeviceDescription);
                 
                 communicationManager.setConnectionByCustomerName(deviceInformation.Customer);
-                //do NOT do this the first time the software runs...only need to do this 
-                communicationManager.getCurrentSoftwareVersion(function(version){
+
+                
+                    debugger;
+                communicationManager.getCurrentSoftwareVersion().done(function(version){
+                    debugger;
                     if (version == null){
                         //there was a network error getting current software version but no need to tell them yet
                         return;
                     }
-                    
+
                     if(version != constants.currentSoftwareVersion){
-                        me.viewModel.versionUpdate(version);
+                    	me.viewModel.versionUpdate(version);
                     }
                 });
+                
             } else{
                 $("#settingsView").kendoMobileModalView("open");                
             }
@@ -80,7 +84,7 @@ function (communicationManager,routeController,geographyController,messagesContr
                         $("#errorMessage").show();
                         kendoApp.hideLoading();
                         if(errorMessage == "There was a problem logging in: <br/>Software Update Required"){
-                            communicationManager.getCurrentSoftwareVersion(function(version){
+                            communicationManager.getCurrentSoftwareVersion.done(function(version){
                                 if(version != constants.currentSoftwareVersion){ 
                                     me.viewModel.versionUpdate(version);
                                 }

@@ -1,8 +1,34 @@
 define([],
 function () {
+    var makeRequest = function (serviceName, data, type) {
+            var options = {
+                cache: false,
+                type: type,
+                url: serviceName,
+                dataType: "json",
+                data: data
+            };
+debugger;
+            var deferred = $.Deferred();
+            $.ajax(options)
+                .done(function(result) {
+                    deferred.resolve(result);
+                })
+                .fail(function (result) {
+                    deferred.reject(result);
+                });
+            return deferred.promise();
+        };
+    
     var me = {
         init: function() {
-    	},
+    	},        
+        ajaxGet: function (serviceName, data) {
+            return makeRequest(data, serviceName, "GET");
+        },
+        ajaxPost: function (serviceName, data) {
+            return makeRequest(data, serviceName, "POST");
+        },
         isValidNumber: function (n) {
           return !isNaN(parseFloat(n)) && isFinite(n) && n >= 0;
         },

@@ -17,10 +17,12 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
             updateCallback = onUpdateCallback;    
             exceptionHandler = onExceptionHandler;            
     	},
-        getCurrentSoftwareVersion: function(callback){
-            remoteData.getCurrentSoftwareVersion(function(version){
-                callback(version);
-            });            
+        getCurrentSoftwareVersion: function(){
+            return remoteData.getCurrentSoftwareVersion();
+            
+            //remoteData.getCurrentSoftwareVersion(function(version){
+            //    callback(version);
+            //});            
         },
         setConnectionByCustomerName: function(customerName){
                 if (customerName.indexOf("qa.") >= 0){

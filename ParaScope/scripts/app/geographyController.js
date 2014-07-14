@@ -185,7 +185,7 @@ function (utilities,traceController) {
             
 
             //32 meters or .02 miles
-            if (position.coords.accuracy > 20) {
+            if (position.coords.accuracy > 32) {
                 traceController.logEvent("GPS watch retruned with an accuracy greater than 50 meters.", position);
                 return;
             }                
@@ -205,7 +205,7 @@ function (utilities,traceController) {
             
             var distanceMoved = utilities.calculateDistance(lastGpsInfo.latitude, lastGpsInfo.longitude, position.coords.latitude, position.coords.longitude);
             
-            if (distanceMoved > .01) {
+            if (distanceMoved > .02) {
                 
                 
                 traceController.logEvent("Odometer is being incremented. Last odometer: " + lastGpsInfo.odometer + 
@@ -223,7 +223,7 @@ function (utilities,traceController) {
                     window.plugins.tts.speak("in " + directions.distanceText + " " + directions.detail,function(){},function(){});
                 }
                 
-                if(me.viewModel.get("mapsActive")){
+                if(me.viewModel.get("mapsActive")){ 
                     
                     var directionsList = me.viewModel.get("directionsList");
             		var nextManeuver = directionsList[0]; 
@@ -231,7 +231,7 @@ function (utilities,traceController) {
                     var distanceRemaining = nextManeuver.distanceMiles;
 
                     var lastDistanceFromNextManeuver = me.viewModel.get("lastDistanceFromNextManeuver");
-                    if (distanceFromNextManeuver < .01){
+                    if (distanceFromNextManeuver < .02){
                         //we are at the location of the maneuver so shift it off the array and we assume we are headed to the next manuever
                 		tts.speak(directionsList[0].detail,function(){},function(){});
                         directionsList.shift();

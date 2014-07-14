@@ -4,7 +4,7 @@
   "AppIdentifier": "com.telerik.ParaScope",
   "ProjectName": "ParaScope",
   "IsRunnable": "true",
-  "FrameworkVersion": "3.2.0",
+  "FrameworkVersion": "3.5.0",
   "AndroidPermissions": [
     "android.permission.CAMERA",
     "android.permission.VIBRATE",
@@ -61,5 +61,7 @@
   "iOSBackgroundMode": [],
   "AndroidVersionCode": "1",
   "DisplayName": "",
-  "Framework": "Cordova"
+  "Framework": "Cordova",
+  "Author": "",
+  "Description": "ParaScope"
 }
