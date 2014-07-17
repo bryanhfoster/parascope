@@ -8,7 +8,7 @@ function () {
                 dataType: "json",
                 data: data
             };
-debugger;
+
             var deferred = $.Deferred();
             $.ajax(options)
                 .done(function(result) {
@@ -24,10 +24,10 @@ debugger;
         init: function() {
     	},        
         ajaxGet: function (serviceName, data) {
-            return makeRequest(data, serviceName, "GET");
+            return makeRequest(serviceName, data,  "GET");
         },
         ajaxPost: function (serviceName, data) {
-            return makeRequest(data, serviceName, "POST");
+            return makeRequest(serviceName, data,  "POST");
         },
         isValidNumber: function (n) {
           return !isNaN(parseFloat(n)) && isFinite(n) && n >= 0;

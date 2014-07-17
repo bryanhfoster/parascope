@@ -99,6 +99,7 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
                     sendReportInterval = setInterval(function(){
                         me.sendDriverReport();
                     }, 60000);
+
                     geographyController.setOdometer(result.Route.ExpectedRouteStartOdometer);
     				localData.saveRoute(result.Route);
     				localData.savePredefinedMessages(result.AvailablePredefinedMessages);
@@ -187,22 +188,20 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
         getUpdates: function() {
     		if (me.deviceIsConnected()) {
                traceController.logEvent("Attempting to get updates from server.");
+                
+    		   me.needToGetUpdates = false;
+                
                remoteData.getRouteUpdate(deviceIdentifier,companyName,constants.currentSoftwareVersion,function(result) {
         				if (result != null) {
         					localData.saveRoute(result.Route);
                             
-                            traceController.logEvent(result);                            
-                            traceController.logEvent(JSON.stringify(result));
+                            traceController.logEvent("Successfully retrieved updates from server."); 
                             
         					if (result.Messages != null) {
-                                //TODO:
-                                //push new messages into driver messages and save
         						localData.saveDriverMessages(result.Messages);
         					}
         					//Events
                             updateCallback();
-    		                me.needToGetUpdates = false;
-                            traceController.logEvent("Successfully retrieved updates from server.");
         				} else{
                             traceController.logEvent("There was an error getting updates from server.");                            
                         }
@@ -424,7 +423,8 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
                                     //this recursively calls send report until driver report is blank and then we can get updates... HAVE to fully process driver reports before we can get updates from server
                                     me.getUpdates();
                                 }
-                			} else{                                
+                			} else{   
+                                debugger;
                                 var forceLogoff = false;
                                 if(result == 1 || result == 3){
                                     //only time we force logoff is if software is out of date or session has died

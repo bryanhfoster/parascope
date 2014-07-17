@@ -53,7 +53,7 @@ function (communicationManager,geographyController,utilities) {
             incrementField: function(e){
                 var field = $(e.currentTarget).data("field");
                 var fieldValue = me.viewModel.get(field);
-                if(fieldValue == "" || parseInt(fieldValue,10) == "NaN"){
+                if(!fieldValue || fieldValue == "" || parseInt(fieldValue,10) == "NaN"){
                     me.viewModel.set(field,1);
                 }else{
                 	me.viewModel.set(field,parseInt(fieldValue,10) + 1);                    

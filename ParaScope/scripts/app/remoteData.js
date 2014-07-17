@@ -17,9 +17,19 @@ function (constants,traceController, utilities) {
                 });
         },
         submitDriverReport: function(driverReport,callback){
+            
+            var serviceURL = constants.serviceUrl + "SubmitDriverReport";
+            var d = new Date();
+			var n = d.getMinutes();
+            var breakIt = n % 2 == 0;
+            
+            //debugger;
+            if(breakIt)
+            	//serviceURL = "fuck";
+            
             $.ajax({
                 type: "POST",
-                url: constants.serviceUrl + "SubmitDriverReport",
+                url: serviceURL,
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(driverReport)
                 })
@@ -82,7 +92,7 @@ function (constants,traceController, utilities) {
         submitErrorReport: function(errorString){
             
             var fullReport = "PARASCOPE ERROR: ";
-            debugger;
+
             try{
                 var deviceInformation = localStorage.getItem("DeviceInformation");
                 if(deviceInformation != "undefined"){
@@ -111,7 +121,7 @@ function (constants,traceController, utilities) {
                     //do nothing
                 })
                 .fail(function(error){
-					//we must be offline, what now
+                    //this is still not full proof, we are offline and need to store locally or try and resend when online
                 });
         }
     };

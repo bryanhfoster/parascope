@@ -12,15 +12,12 @@ function (communicationManager,routeController,geographyController,messagesContr
                 
                 communicationManager.setConnectionByCustomerName(deviceInformation.Customer);
 
-                
-                    debugger;
                 communicationManager.getCurrentSoftwareVersion().done(function(version){
-                    debugger;
                     if (version == null){
                         //there was a network error getting current software version but no need to tell them yet
                         return;
                     }
-
+                    
                     if(version != constants.currentSoftwareVersion){
                     	me.viewModel.versionUpdate(version);
                     }

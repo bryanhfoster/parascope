@@ -1,5 +1,5 @@
-define(["kendo","app/communicationManager","app/templateLoader","app/loginController","app/routeController","app/messagesController","app/geographyController","app/traceController"],
-function (kendo,communicationManager,templateLoader,loginController,routeController,messagesController,geographyController,traceController) {
+define(["app/communicationManager","app/templateLoader","app/loginController","app/routeController","app/messagesController","app/geographyController","app/traceController"],
+function (communicationManager,templateLoader,loginController,routeController,messagesController,geographyController,traceController) {
     return {
         init: function(){
             //always load all templates first
@@ -8,8 +8,11 @@ function (kendo,communicationManager,templateLoader,loginController,routeControl
             var def = templateLoader.loadTemplates();
             
             def.done(function(){
-                kendoApp = new kendo.mobile.Application(document.body,{initial:"loginView", skin:"flat"});
+                kendoApp = new kendo.mobile.Application(document.body,{skin:"flat"});
                 
+                //setting initial view doesn't explicitly navigate us back to login on refresh so do it EVERY time we call init
+                kendoApp.navigate("#loginView");  
+        		                
                 //stupid but kendo wasn't fully initialized and doesn't have a ready method so we have to put this in a timeout.
                 setTimeout(function(){
                     loginController.init();

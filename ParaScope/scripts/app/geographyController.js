@@ -1,22 +1,42 @@
-define(["app/utilities","app/traceController"],
-function (utilities,traceController) {
+define(["app/utilities",
+		"app/traceController",
+
+        "esri/map",
+        "esri/tasks/RouteTask",
+        "esri/tasks/locator",
+
+        "esri/symbols/PictureMarkerSymbol",
+        "esri/geometry/Point",
+        "esri/geometry/webMercatorUtils",
+
+        "esri/graphic",
+        "esri/symbols/SimpleLineSymbol",
+        "esri/tasks/RouteParameters",
+
+        "esri/tasks/FeatureSet",
+        "esri/units"],
+function (utilities, traceController, 
+            Map,RouteTask,Locator,
+            PictureMarkerSymbol,Point, WebMercatorUtils,
+            Graphic, SimpleLineSymbol, RouteParameters,
+            FeatureSet, Units) {
     //these are all mapping helper functions that need to go somewhere else
     var getWebPointFromLatLong = function (latitude, longitude) {
-        var geographicPoint = new esri.geometry.Point(longitude, latitude);
-        var mercatorPoint = esri.geometry.geographicToWebMercator(geographicPoint);
+        var geographicPoint = new Point(longitude, latitude);
+        var mercatorPoint = WebMercatorUtils.geographicToWebMercator(geographicPoint);
         return mercatorPoint;
     };
     var createPointGraphic = function (latitude, longitude, image, width, height) {
-        return new esri.Graphic(getWebPointFromLatLong(latitude, longitude), new esri.symbol.PictureMarkerSymbol(image, width, height));
+        return new Graphic(getWebPointFromLatLong(latitude, longitude), new PictureMarkerSymbol(image, width, height));
     };
     var segmentGraphic;
     var zoomToSegment = function (index,directionFeatures) {
         var segment = directionFeatures[index];
-        var segmentSymbol = new esri.symbol.SimpleLineSymbol().setColor(new dojo.Color([255, 0, 0, 0.5])).setWidth(15);
+        var segmentSymbol = new SimpleLineSymbol().setColor(new dojo.Color([255, 0, 0, 0.5])).setWidth(15);
 
         map.setExtent(segment.geometry.getExtent(), true);
         if (!segmentGraphic) {
-            segmentGraphic = map.graphics.add(new esri.Graphic(segment.geometry, segmentSymbol));
+            segmentGraphic = map.graphics.add(new Graphic(segment.geometry, segmentSymbol));
         } else {
             segmentGraphic.setGeometry(segment.geometry);
         }
@@ -27,10 +47,10 @@ function (utilities,traceController) {
         //console.log(JSON.stringify(solveResult));
         var directions = solveResult.routeResults[0].directions;
         //directions.shift();
-        var routeSymbol = new esri.symbol.SimpleLineSymbol().setColor(new dojo.Color([0, 0, 255, 0.5])).setWidth(4);
+        var routeSymbol = new SimpleLineSymbol().setColor(new dojo.Color([0, 0, 255, 0.5])).setWidth(4);
 
         //Add route to the map.
-        var routeGraphic = new esri.Graphic(directions.mergedGeometry, routeSymbol);
+        var routeGraphic = new Graphic(directions.mergedGeometry, routeSymbol);
         map.graphics.add(routeGraphic);
         //routeGraphic.getDojoShape().moveToBack();
         //cts.geography.zoomToExtent(directions.extent);
@@ -80,11 +100,10 @@ function (utilities,traceController) {
     var me = {
         init: function(){
             
-            map = new esri.Map("map", {
+            map = new Map("map", {
               basemap: "streets",
               center: [-98.5795,39.8282],
               zoom: 4,
-              //slider: false,
               autoResize: false
             });
             
@@ -93,6 +112,14 @@ function (utilities,traceController) {
                 //do nothing, may want to do some geolocation type things in here
             });
                 
+            amplify.subscribe("useNativeNavigator.changed",function(useNativeNavigator){
+                
+        		navigator.geolocation.getCurrentPosition(function(position){
+                    me.positionRetrieved(position);
+                    me.clearGeolocationWatch();
+                    me.startGeolocationWatch(useNativeNavigator);
+                });
+            });
                 
         },
         viewModel:kendo.observable({
@@ -157,32 +184,29 @@ function (utilities,traceController) {
                 me.geolocationWatch = null;
             }
         },
-        startGeolocationWatch: function(){
-            traceController.logEvent("Starting geolocation watch.");
+        startGeolocationWatch: function(useNativeNavigator){
+            traceController.logEvent("Starting geolocation watch.  NativeNavigator: " + useNativeNavigator ? "yes" : "no");
             	
-                //navigator.geolocation.getCurrentPosition(me.positionRetrieved,function showError(error) {
-                //	alert(JSON.stringify(error))
-                //	me.startGeolocationWatch();
-                //});
+            var geolocation = navigator.geolocation;
+            if(useNativeNavigator)
+            	geolocation = window.nativegeolocation;
                 
-            me.geolocationWatch = window.yarrrrr.watchPosition(me.positionRetrieved, function(error) {
-                //alert(JSON.stringify(error));
+            var options = {maximumAge: 5000, timeout: 5000,enableHighAccuracy: true};
+            
+            me.geolocationWatch = geolocation.watchPosition(me.positionRetrieved, function(error) {
+                traceController.logEvent("There was an error obtaining geolocation information.",JSON.stringify(error));
+                
                 if(error.code == 1){
-                    //permission error, try navigator
+                    //permission error, try cordova navigator
                     navigator.geolocation.watchPosition(me.positionRetrieved, function(error) {
-                        //alert(JSON.stringify(error));
-                        traceController.logEvent("There was an error obtaining geolocation information.",error);
-                    }, {maximumAge: 3000, timeout: 3000,enableHighAccuracy: true});
+                        traceController.logEvent("There was an error obtaining geolocation information.",JSON.stringify(error));
+                    }, options);
                 }
-                //alert(JSON.stringify(error));
-                traceController.logEvent("There was an error obtaining geolocation information.",error);
-            }, {maximumAge: 3000, timeout: 3000,enableHighAccuracy: true});
+            }, options);
         },
         positionRetrieved: function(position) {
                 
-		    var lastGpsInfo = me.getGpsInfo()
-
-            
+		    var lastGpsInfo = me.getGpsInfo()            
 
             //32 meters or .02 miles
             if (position.coords.accuracy > 32) {
@@ -308,14 +332,14 @@ function (utilities,traceController) {
             
             var destination = me.getDestination();
             map.graphics.clear();
-            var routeTask = new esri.tasks.RouteTask("http://usloft1491.serverloft.com:6080/arcgis/rest/services/Route/NAServer/Route");
+            var routeTask = new RouteTask("http://usloft1491.serverloft.com:6080/arcgis/rest/services/Route/NAServer/Route");
             //we only set gpsinfo when we know it is accurate so this just grabs last known accurate location.
             var lastGpsInfo = me.getGpsInfo();
             //setup the route parameters
-            routeParams = new esri.tasks.RouteParameters();
-            routeParams.stops = new esri.tasks.FeatureSet();
+            routeParams = new RouteParameters();
+            routeParams.stops = new FeatureSet();
             routeParams.returnDirections = true;
-            routeParams.directionsLengthUnits = esri.Units.MILES;
+            routeParams.directionsLengthUnits = Units.MILES;
     
             var startGraphic = createPointGraphic(lastGpsInfo.latitude,lastGpsInfo.longitude,'images/icon_map-start.png', 30, 40);
             routeParams.stops.features.push(startGraphic);

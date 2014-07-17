@@ -25,7 +25,11 @@ function (utilities) {
                 me.viewModel.set("events",[]); 
             },
             events:[],
-            sendTraceToServer:false
+            sendTraceToServer:false,
+            useNativeNavigator:false,
+            nativeNavigatorChanged: function(){
+                amplify.publish("useNativeNavigator.changed",me.viewModel.get("useNativeNavigator"));
+            }
         }),        
         logEvent: function(event,object)  {
             
