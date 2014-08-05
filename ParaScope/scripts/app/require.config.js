@@ -18,6 +18,5 @@ var require = {
         "bootstrap": ["jquery"],
         "amplify": ["jquery"]
     },
-    waitSeconds: 30,
-    urlArgs:  "bust=" + (new Date()).getTime()// never leave this for live
+    waitSeconds: 30
 };

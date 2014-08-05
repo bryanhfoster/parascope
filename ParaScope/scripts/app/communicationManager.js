@@ -87,10 +87,8 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
     		credentials.DeviceIdentifier = deviceInformation.Identifier;
     		credentials.Password = password;
             
-    		remoteData.login(credentials, function(result) {
-                if (result == null){
-                    //there was a network error
-                    //tell user
+    		remoteData.login(credentials, function(result, error) {
+                if (error){
                     callback("There was a network error, please try again.");
                     return;
                 }
@@ -126,6 +124,9 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
                     }
                     if(result.AuthenticationError == 4){
                         message = message + "Software Update Required";
+                    }  
+                    if(result.AuthenticationError == 5){
+                        message = message + "There was an unknown server error. Please try again or contact support.";
                     }                 
     				callback(message);
     			}
@@ -148,6 +149,8 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
     				//First time connected
     				pubnubIsConnected = true;
                     me.setDeviceStatus();
+                                        
+                    remoteData.submitErrorReports();
     			},
     			disconnect: function () {
                     traceController.logEvent("PubNub disconnected.");
@@ -161,7 +164,9 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
                     me.setDeviceStatus();
     				if (me.needToGetUpdates) {
     					me.sendDriverReport();
-    				}
+    				}                    
+                    
+                    remoteData.submitErrorReports();                    
     			}     
     		});
     	},
@@ -189,7 +194,7 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
     		if (me.deviceIsConnected()) {
                traceController.logEvent("Attempting to get updates from server.");
                 
-    		   me.needToGetUpdates = false;
+    		   //may need to do this here me.needToGetUpdates = false;
                 
                remoteData.getRouteUpdate(deviceIdentifier,companyName,constants.currentSoftwareVersion,function(result) {
         				if (result != null) {
@@ -202,6 +207,8 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
         					}
         					//Events
                             updateCallback();
+    		                me.needToGetUpdates = false;
+                            traceController.logEvent("Successfully retrieved updates from server.");
         				} else{
                             traceController.logEvent("There was an error getting updates from server.");                            
                         }
@@ -440,7 +447,7 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
                                     exceptionHandler();
                                 } else{
                                     //if unsuccessful then we need to merge this report with whatever the current one is...   
-                                    traceController.logEvent("There was an error submitting driver report. Report: ",driverReport);  
+                                    //traceController.logEvent("There was an error submitting driver report. Report: ",driverReport);  
                                     traceController.logEvent("There was an error submitting driver report. Error: ",result);
                                     me.mergeDriverReports(driverReport);
                                 }

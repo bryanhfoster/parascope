@@ -13,13 +13,23 @@ function () {
         },
         loadDeviceInformation: function() {
             var deviceInformation = localStorage.getItem("DeviceInformation");
-            if(deviceInformation != "undefined"){
+            if(deviceInformation !== "undefined"){
                 return JSON.parse(deviceInformation);
             }
             return null;
         },
         saveDeviceInformation: function(object){
             localStorage.setItem("DeviceInformation", JSON.stringify(object));
+        },
+        loadErrorReports: function() {
+            var errorReports = localStorage.getItem("errorReports");
+            if(errorReports !== "undefined" && errorReports != null){
+                return JSON.parse(errorReports);
+            }
+            return [];
+        },
+        saveErrorReports: function(object){
+            localStorage.setItem("errorReports", JSON.stringify(object));
         },
         loadRoute: function(){
             var route = localStorage.getItem("RouteUpdate");

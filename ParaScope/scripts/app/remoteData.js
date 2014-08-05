@@ -1,6 +1,6 @@
-define(["app/constants","app/traceController","app/utilities"],
-function (constants,traceController, utilities) {
-    var me = {
+define(["app/constants","app/traceController","app/localData","app/utilities"],
+function (constants,traceController,localData,utilities) {
+    var me =  {
         loadEmptyDriverReport: function(callback){
             $.ajax({
                 type: "GET",
@@ -12,31 +12,21 @@ function (constants,traceController, utilities) {
                     callback(result);
                 })
                 .fail(function(error){
-                	me.submitErrorReport(JSON.stringify(error));
+                	me.storeErrorReport(JSON.stringify(error));
                     callback(null);
                 });
         },
         submitDriverReport: function(driverReport,callback){
-            
-            var serviceURL = constants.serviceUrl + "SubmitDriverReport";
-            var d = new Date();
-			var n = d.getMinutes();
-            var breakIt = n % 2 == 0;
-            
-            //debugger;
-            if(breakIt)
-            	//serviceURL = "fuck";
-            
             $.ajax({
                 type: "POST",
-                url: serviceURL,
+                url: constants.serviceUrl + "SubmitDriverReport",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(driverReport)
                 })
                 .done(function (result) {
                     callback(result);
                 }).fail(function(error){
-                    me.submitErrorReport(JSON.stringify(error));
+                    me.storeErrorReport(JSON.stringify(error));
                     callback(error);
                 });
         },
@@ -51,29 +41,26 @@ function (constants,traceController, utilities) {
                     callback(result);
                 })
                 .fail(function(error){
-                    me.submitErrorReport(JSON.stringify(error));
+                    me.storeErrorReport(JSON.stringify(error));
                     callback(null);
                 });
         },
         login: function(credentials,callback){
-           var jsonstring = JSON.stringify(credentials);
-            //jsonstring = jsonstring.substring(0, jsonstring.length - 10);
-            //debugger;
             $.ajax({
                 type: "POST",
                 url: constants.serviceUrl + "Login",
                 contentType: "application/json; charset=utf-8",
-                data: jsonstring,
+                data: JSON.stringify(credentials),
                 dataType: "json"})
                 .done(function (result) {
                     callback(result);
                 })
                 .fail(function(error){
-                    me.submitErrorReport(JSON.stringify(error));
-                    callback(null);
+                    me.storeErrorReport(JSON.stringify(error));
+                    callback(null, error);
                 });
         },
-        getCurrentSoftwareVersion: function(){
+        getCurrentSoftwareVersion: function(callback){
             return utilities.ajaxGet(constants.serviceUrl + "GetCurrentSoftwareVersion");
             //$.ajax({
             //    type: "GET",
@@ -85,11 +72,11 @@ function (constants,traceController, utilities) {
             //        callback(result);
             //    })
             //    .fail(function(error){
-            //        me.submitErrorReport(JSON.stringify(error));
+            //        me.storeErrorReport(JSON.stringify(error));
             //        callback(null);
             //    });
         },
-        submitErrorReport: function(errorString){
+        storeErrorReport: function(errorString){
             
             var fullReport = "PARASCOPE ERROR: ";
 
@@ -99,33 +86,48 @@ function (constants,traceController, utilities) {
                     
                     var deviceInformationObject = JSON.parse(deviceInformation);
                     
-            	    fullReport = fullReport.concat("\nCustomer: " + deviceInformationObject.Customer);
-            		fullReport = fullReport.concat("\nDeviceDescription: " + deviceInformationObject.DeviceDescription);
-            		fullReport = fullReport.concat("\nDeviceIdentifier: " + deviceInformationObject.Identifier);
+            	    fullReport = fullReport.concat("\\nCustomer: " + deviceInformationObject.Customer);
+            		fullReport = fullReport.concat("\\nDeviceDescription: " + deviceInformationObject.DeviceDescription);
+            		fullReport = fullReport.concat("\\nDeviceIdentifier: " + deviceInformationObject.Identifier);
                     
                 }
             } catch(error) {
-            	fullReport = fullReport.concat("\nError parsing device information: " + JSON.stringify(error));
+            	fullReport = fullReport.concat("\\nError parsing device information: " + JSON.stringify(error));
             }
             
-			fullReport = fullReport.concat("\nError: " + errorString);
+			fullReport = fullReport.concat("\\nError: " + errorString);
             
-            $.ajax({
-                type: "POST",
-                cache: false,
-                url: constants.serviceUrl + "submitErrorReport",
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(fullReport),
-                dataType: "json"})
-                .done(function (result) {
-                    //do nothing
-                })
-                .fail(function(error){
-                    //this is still not full proof, we are offline and need to store locally or try and resend when online
-                });
+            var errorReports = localData.loadErrorReports();
+            errorReports.push(fullReport);
+            localData.saveErrorReports(errorReports);
+            
+            me.submitErrorReports();
+            
+        },
+        submitErrorReports: function(){
+            
+            var errorReports = localData.loadErrorReports();
+            
+            if(errorReports && errorReports.length > 0){
+                var errorReport = errorReports.pop();
+                localData.saveErrorReports(errorReports);
+            
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: constants.serviceUrl + "submitErrorReport",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(errorReport),
+                    dataType: "json"})
+                    .done(function (result) {
+                        me.submitErrorReports();
+                    })
+                    .fail(function(error){
+                        //was not submitted, eventually we could even tell the user that they are fucked, but for now we'll try again next time we are online
+                    });
+            }
         }
     };
-    
-    return me;    
+    return me;  
     
 });

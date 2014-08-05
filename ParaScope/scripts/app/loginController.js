@@ -27,8 +27,9 @@ function (communicationManager,routeController,geographyController,messagesContr
                 $("#settingsView").kendoMobileModalView("open");                
             }
         },
-        viewModel:kendo.observable({            
-            credentials: {customer:"",password:"1743",description:""},
+        viewModel:kendo.observable({     
+            loginEnabled: true,
+            credentials: {customer:"",password:"",description:""},
             showDebugView: function(){
                 $("#debugView").kendoMobileModalView("open");                
             },
@@ -55,9 +56,18 @@ function (communicationManager,routeController,geographyController,messagesContr
                 $("#settingsView").kendoMobileModalView("open");  
             },
             login: function() {
+                
+                //disable the login button so they can't click it twice
+                me.viewModel.set("loginEnabled",false);
+                
                 kendoApp.showLoading();
             	var credentials = me.viewModel.get("credentials");
             	communicationManager.authenticate(credentials.password, credentials.customer, credentials.description, function(errorMessage){
+                    
+                    //this will always get called back so we can just enable login button here, 
+                    //but if for some reason we change the defferred logic to not call back here we need to ensure that login is re-enabled
+                	me.viewModel.set("loginEnabled",true);
+                    
                     if(!errorMessage){
                         //only watch geolocation when you are logged in to save battery
                         geographyController.startGeolocationWatch();

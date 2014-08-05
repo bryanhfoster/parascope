@@ -6,7 +6,7 @@ var map;
 var tabstrip;
 
        
-require(["app/parascope", "dojo/domReady!"], function (app) {     
+require(["app/parascope"], function (app) {     
     parascope = app;
     $(document).ready(function () {   
     	document.addEventListener("deviceready", function(){
