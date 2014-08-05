@@ -147,8 +147,8 @@ function (utilities, traceController,
                     zoomLevel = 16;
                 }
                 var coordinate = segment.coordinate;
-                var startGraphic = createPointGraphic(coordinate.latitude,coordinate.longitude,'images/icon_map-start.png', 30, 40);
-                map.graphics.add(startGraphic);
+                //var startGraphic = createPointGraphic(coordinate.latitude,coordinate.longitude,'images/icon_map-start.png', 30, 40);
+                //map.graphics.add(startGraphic);
                 map.centerAndZoom(getWebPointFromLatLong(coordinate.latitude,coordinate.longitude),12);
 
             },
@@ -209,7 +209,8 @@ function (utilities, traceController,
 		    var lastGpsInfo = me.getGpsInfo()            
 
             //32 meters or .02 miles
-            if (position.coords.accuracy > 32) {
+            //50 meters or .03 miles
+            if (position.coords.accuracy > 50) {
                 traceController.logEvent("GPS watch retruned with an accuracy greater than 50 meters.", position);
                 return;
             }                
@@ -229,7 +230,7 @@ function (utilities, traceController,
             
             var distanceMoved = utilities.calculateDistance(lastGpsInfo.latitude, lastGpsInfo.longitude, position.coords.latitude, position.coords.longitude);
             
-            if (distanceMoved > .02) {
+            if (distanceMoved > .03) {
                 
                 
                 traceController.logEvent("Odometer is being incremented. Last odometer: " + lastGpsInfo.odometer + 
@@ -241,47 +242,47 @@ function (utilities, traceController,
                 lastGpsInfo.latitude = position.coords.latitude;
                 lastGpsInfo.longitude = position.coords.longitude;
                 
-                if(me.viewModel.get("speakManeuver")){
-                    var directions = me.viewModel.get("directionsList")[0];
-                    me.viewModel.set("speakManeuver",false);
-                    window.plugins.tts.speak("in " + directions.distanceText + " " + directions.detail,function(){},function(){});
-                }
+                //if(me.viewModel.get("speakManeuver")){
+                //    var directions = me.viewModel.get("directionsList")[0];
+                //    me.viewModel.set("speakManeuver",false);
+                //    window.plugins.tts.speak("in " + directions.distanceText + " " + directions.detail,function(){},function(){});
+                //}
                 
                 if(me.viewModel.get("mapsActive")){ 
                     
-                    var directionsList = me.viewModel.get("directionsList");
-            		var nextManeuver = directionsList[0]; 
-                    var distanceFromNextManeuver = utilities.calculateDistance(nextManeuver.coordinate.latitude, nextManeuver.coordinate.longitude, position.coords.latitude, position.coords.longitude)
-                    var distanceRemaining = nextManeuver.distanceMiles;
+                    //var directionsList = me.viewModel.get("directionsList");
+            		//var nextManeuver = directionsList[0]; 
+                    //var distanceFromNextManeuver = utilities.calculateDistance(nextManeuver.coordinate.latitude, nextManeuver.coordinate.longitude, position.coords.latitude, position.coords.longitude)
+                    //var distanceRemaining = nextManeuver.distanceMiles;
 
-                    var lastDistanceFromNextManeuver = me.viewModel.get("lastDistanceFromNextManeuver");
-                    if (distanceFromNextManeuver < .02){
-                        //we are at the location of the maneuver so shift it off the array and we assume we are headed to the next manuever
-                		tts.speak(directionsList[0].detail,function(){},function(){});
-                        directionsList.shift();
-                    	me.viewModel.set("directionsList",directionsList);
-                    	me.viewModel.set("lastDistanceFromNextManeuver",null);
-                        me.viewModel.set("speakManeuver",true);
+                    //var lastDistanceFromNextManeuver = me.viewModel.get("lastDistanceFromNextManeuver");
+                    //if (distanceFromNextManeuver < .02){
+                    //    //we are at the location of the maneuver so shift it off the array and we assume we are headed to the next manuever
+                	//	tts.speak(directionsList[0].detail,function(){},function(){});
+                    //    directionsList.shift();
+                    //	me.viewModel.set("directionsList",directionsList);
+                    //	me.viewModel.set("lastDistanceFromNextManeuver",null);
+                    //    me.viewModel.set("speakManeuver",true);
                 		
-                    } else if (lastDistanceFromNextManeuver && lastDistanceFromNextManeuver < distanceFromNextManeuver){
-                        //we are getting farther away so reroute
-                    	window.plugins.tts.speak("re-routing",function(){},function(){});
-                        me.mapRoute();
-                    	me.viewModel.set("lastDistanceFromNextManeuver",null);
-                    } else{
+                    //} else if (lastDistanceFromNextManeuver && lastDistanceFromNextManeuver < distanceFromNextManeuver){
+                    //    //we are getting farther away so reroute
+                    //	window.plugins.tts.speak("re-routing",function(){},function(){});
+                    //    me.mapRoute();
+                    //	me.viewModel.set("lastDistanceFromNextManeuver",null);
+                    //} else{
                             
-                        distanceRemaining = distanceRemaining - distanceMoved;
-                        var distanceText;
-                         if (distanceRemaining < .25) {
-                            distanceText = utilities.toFixed(distanceRemaining * 5280,0).toString() + " ft";
-                        } else {
-                            distanceText = utilities.toFixed(distanceRemaining, 1).toString() + " mi";
-                        }
-                        me.viewModel.set("directionsList[0].distanceMiles",nextManeuver.distanceMiles -distanceMoved);
-                        me.viewModel.set("directionsList[0].distanceText",distanceText);
-                        //if we get this far we are just driving the route
-                        me.viewModel.set("lastDistanceFromNextManeuver",distanceFromNextManeuver);
-                    }
+                    //    distanceRemaining = distanceRemaining - distanceMoved;
+                    //    var distanceText;
+                    //     if (distanceRemaining < .25) {
+                    //        distanceText = utilities.toFixed(distanceRemaining * 5280,0).toString() + " ft";
+                    //    } else {
+                    //        distanceText = utilities.toFixed(distanceRemaining, 1).toString() + " mi";
+                    //    }
+                    //    me.viewModel.set("directionsList[0].distanceMiles",nextManeuver.distanceMiles -distanceMoved);
+                    //    me.viewModel.set("directionsList[0].distanceText",distanceText);
+                    //    //if we get this far we are just driving the route
+                    //    me.viewModel.set("lastDistanceFromNextManeuver",distanceFromNextManeuver);
+                    //}
                     
                    if(vehicleLocationGraphic != null){
                     	map.graphics.remove(vehicleLocationGraphic);                
@@ -290,9 +291,9 @@ function (utilities, traceController,
                     map.graphics.add(vehicleLocationGraphic);
                     
                     var zoomLevel = 13;
-                    if(distanceRemaining < 1){
-                        zoomLevel = 16;
-                    }
+                    //if(distanceRemaining < 1){
+                    //    zoomLevel = 16;
+                    //}
                     
                     if(me.viewModel.get("followVehicle")){
                         map.centerAndZoom(getWebPointFromLatLong(position.coords.latitude,position.coords.longitude), zoomLevel);

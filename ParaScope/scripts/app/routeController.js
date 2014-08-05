@@ -200,15 +200,8 @@ function (communicationManager,geographyController,utilities) {
                 $("#groupArriveView").kendoMobileModalView("close"); 
             },
             callRider: function(){
-                //TODO Fix changes I made in error
                var job = me.viewModel.get("job");
                var rideId = job.RideId;
-               //var jobIndex = 0;
-               //$.grep(me.viewModel.get("route.Jobs"),function(element,index){
-               //    if(element.Id == job.Id)
-               //         jobIndex = index;
-               //});
-                //should this be rideid or jobid? how do we know what number to call????
                communicationManager.addCallRequest(rideId);
                me.setUserMessage("Call is being sent");
                $("#confirmCallRiderView").kendoMobileModalView("close");
@@ -292,7 +285,7 @@ function (communicationManager,geographyController,utilities) {
                 											utilities.makeValidNumber(job.Escorts),utilities.makeValidNumber(job.NumberOfPasses),odometer,signature,signatureReason);
                 
                 //clear signature                
-                me.viewModel.set("signature",null);
+                me.viewModel.set("signature",'');
                 
                 geographyController.setOdometer(odometer);
                 var jobs = $.grep(me.viewModel.route.Jobs,function(element,index){
@@ -359,7 +352,7 @@ function (communicationManager,geographyController,utilities) {
                 me.viewModel.set("allowPerformPickup",!job.SignatureRequired);
                 
                 
-                me.viewModel.set("signature",null);
+                me.viewModel.set("signature",'');
                 me.viewModel.set("currentSignatureReason",null);
                 
                 //Get Odometer from Geography
