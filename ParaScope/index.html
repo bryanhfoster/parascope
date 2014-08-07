@@ -25,10 +25,6 @@
         <!-- CUSTOM STYLES - load last for overriding purposes -->
         <link href="styles/main.css" rel="stylesheet" />
         
-        <script>
-            window.nativegeolocation = window.navigator.geolocation;  
-        </script>
-        
         <script src="cordova.js"></script>        
         <script src="scripts/app/require.config.js"></script>
         <script src="scripts/lib/require.js" data-main="scripts/app/main"> </script>
@@ -38,7 +34,7 @@
         <div data-role="layout" data-id="mobile-tabstrip">
             <div data-role="footer">
                 <div data-role="tabstrip" id="mainTabs">
-                    <a id="scheduleTab" href="#routeView" data-icon="recents">Schedule</a>
+                    <a id="scheduleTab" href="#routeView" data-icon="home">Schedule</a>
                     <a id="messagesTab" href="#messagesView" data-icon="organize">Messages</a>
                     
                 </div>

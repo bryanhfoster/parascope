@@ -424,7 +424,7 @@ function (communicationManager,geographyController,utilities) {
                 if(delta.length > 0){
                     var template = kendo.template($("#routeUpdatedTemplate").html());                
                     var result = kendo.render(template, delta); //Execute the template                
-                    $("div[data-role='header']").append('<div class="alert alert-warning alert-dismissable" data-dismiss="alert"> <div class="row"><div class="col-lg-11"><strong><h2><ul>' + result + '</ul></h2></strong></div><div class="col-lg-1"><div class="pull-right" data-dismiss="alert"><i class="icon-remove-sign icon-2x"></i></div></div></div></div>');
+                    $("div[data-role='header']").append('<div class="alert alert-warning alert-dismissable" data-dismiss="alert"> <div class="row"><div class="col-xs-11"><strong><h2><ul>' + result + '</ul></h2></strong></div><div class="col-lg-1"><div class="pull-right" data-dismiss="alert"><i class="icon-remove-sign icon-2x"></i></div></div></div></div>');
                     navigator.notification.beep(2);
                 }
             }

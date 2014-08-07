@@ -134,7 +134,7 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
     	},
         subscribeToUpdates: function() {
 	        var pubnub = PUBNUB.init({publish_key : constants.publishKey , subscribe_key : constants.subscribeKey});
-            traceController.logEvent("Subscribing to PubNub.");
+            traceController.logEvent("Subscribing to PubNub." + deviceIdentifier);
     		pubnub.subscribe({
     			channel: deviceIdentifier,
     			callback: function (message) {

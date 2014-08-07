@@ -168,6 +168,7 @@ define([
                    }
                },
                startGeolocationWatch: function() {
+
                    var geolocation = window.nativegeolocation;
                    geolocation = navigator.geolocation;
                    var options = {enableHighAccuracy: true};
@@ -201,7 +202,9 @@ define([
                        lastGpsInfo.speed = position.coords.speed * 2.23694;
                        lastGpsInfo.timeTaken = utilities.getCurrentUTC();
                        traceController.logEvent("Setting initial GPS postion.", lastGpsInfo);
-                
+                	   
+                       me.updateVehicleLocationOnMap(position);
+                       
                        me.setGpsInfo(lastGpsInfo);
                        return;
                    }
@@ -259,7 +262,20 @@ define([
                            //}
                        }
                    }
-                   if (me.viewModel.get("mapsActive")) { 
+                   if (distanceMoved > .01) { 
+                       me.updateVehicleLocationOnMap(position);                       
+                   }
+                   
+            
+                   lastGpsInfo.accuracy = position.coords.accuracy;
+                   lastGpsInfo.speed = position.coords.speed * 2.23694;
+                   lastGpsInfo.timeTaken = utilities.getCurrentUTC();
+                   traceController.logEvent("Setting GPS postion.", lastGpsInfo);
+                   me.setGpsInfo(lastGpsInfo);
+               },
+               updateVehicleLocationOnMap:function(position){
+                   debugger;
+                   
                        if (vehicleLocationGraphic != null) {
                            map.graphics.remove(vehicleLocationGraphic);                
                        }
@@ -274,13 +290,7 @@ define([
                        if (me.viewModel.get("followVehicle")) {
                            map.centerAndZoom(getWebPointFromLatLong(position.coords.latitude, position.coords.longitude), zoomLevel);
                        } 
-                   }
-            
-                   lastGpsInfo.accuracy = position.coords.accuracy;
-                   lastGpsInfo.speed = position.coords.speed * 2.23694;
-                   lastGpsInfo.timeTaken = utilities.getCurrentUTC();
-                   traceController.logEvent("Setting GPS postion.", lastGpsInfo);
-                   me.setGpsInfo(lastGpsInfo);
+                   
                },
                geolocationWatch: null,       
                getGpsInfo: function() {
@@ -316,7 +326,7 @@ define([
                    routeParams.stops.features.push(startGraphic);
                    var endGraphic = createPointGraphic(destination.latitude, destination.longitude, 'images/icon_map-stop.png', 30, 40);
                    routeParams.stops.features.push(endGraphic);
-                   map.graphics.add(startGraphic);
+                   //map.graphics.add(startGraphic);
                    map.graphics.add(endGraphic);
             
                    routeTask.solve(routeParams, routeCallback, function(error) {

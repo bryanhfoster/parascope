@@ -59,6 +59,11 @@ a:hover { text-decoration: none; }
         line-height: 26px;
         border-radius: 6px;
     }
+    .image-responsive
+    {
+        height: 51px;
+        width: 60px;
+    }
     h1
 {
     font-family: "lato_lightregular", Helvetica, Arial, sans-serif;

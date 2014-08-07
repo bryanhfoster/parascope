@@ -9,7 +9,7 @@ var require = {
         "dojox": "http://js.arcgis.com/3.9/js/dojo/dojox",
         "bootstrap": "../lib/bootstrap.min",
         "amplify": "../lib/amplify",
-        "pubnub": "../lib/pubnub-3.5.3.min",
+        "pubnub": "../lib/pubnub-3.6.7.min",
         "signature": "../lib/signature_pad"
     },
     shim: {

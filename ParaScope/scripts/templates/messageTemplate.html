@@ -1,12 +1,12 @@
 <div>
 	<div class="row">
-        <div class="col-lg-3">
+        <div class="col-xs-3">
             <h2 style="margin:0px"><span data-bind="date: CreatedDateJson" data-dateformat="MM/dd/yyyy hh:mmtt"></span></h2>
         </div>      
-        <div class="col-lg-5">
+        <div class="col-xs-5">
 			<h2 style="margin:0px">#=Content#</h2>
         </div>      
-        <div class="col-lg-4">
+        <div class="col-xs-4">
             #if(Answered || MessageResponseType == 1){#
                 <div class="btn btn-primary btn-responsive" data-bind="click:messageReplyClick">Dismiss</div>
             #}else if(MessageResponseType == 2){#
