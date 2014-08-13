@@ -15,13 +15,15 @@ define([
            "esri/tasks/RouteParameters",
 
            "esri/tasks/FeatureSet",
-           "esri/units"
+           "esri/units",
+           "esri/symbols/SimpleFillSymbol",
+           "esri/geometry/Circle"
        ],
        function (utilities, traceController, 
                  Map, RouteTask, Locator,
                  PictureMarkerSymbol, Point, WebMercatorUtils,
                  Graphic, SimpleLineSymbol, RouteParameters,
-                 FeatureSet, Units) {
+                 FeatureSet, Units, SimpleFillSymbol, Circle) {
            //these are all mapping helper functions that need to go somewhere else
            var getWebPointFromLatLong = function (latitude, longitude) {
                var geographicPoint = new Point(longitude, latitude);
@@ -98,8 +100,7 @@ define([
                init: function() {
                    map = new Map("map", {
                                      basemap: "streets",
-                                     center: [-98.5795,39.8282],
-                                     zoom: 4,
+                                     zoom: 15,
                                      autoResize: false
                                  });
             
@@ -108,6 +109,12 @@ define([
                    });
                },
                viewModel:kendo.observable({
+                      gpsLocked: function(){
+                          return true;
+                      },
+                      currentDestination: {address:""},
+                      gpsInfo: {speed:0},
+                      mapsActive: false,
                       speakManeuver:false,
                       lastDistanceFromNextManeuver: null,
                       currentDestination:null,
@@ -122,9 +129,6 @@ define([
                           //me.viewModel.set("nextManeuver",);
                           //me.viewModel.set("nextManeuverCoordinate",);
                       },
-                      resetOdometer: function() {
-                          me.viewModel.set("gpsInfo.odometer", 0);
-                      },
                       zoomToSegment: function (e) {
                           var segment = e.data;
                           var zoomLevel = 13;
@@ -134,16 +138,22 @@ define([
                           var coordinate = segment.coordinate;
                           //var startGraphic = createPointGraphic(coordinate.latitude,coordinate.longitude,'images/icon_map-start.png', 30, 40);
                           //map.graphics.add(startGraphic);
-                          map.centerAndZoom(getWebPointFromLatLong(coordinate.latitude, coordinate.longitude), 12);
+                          map.centerAndZoom(getWebPointFromLatLong(coordinate.latitude, coordinate.longitude), 15);
                       },
-                      refreshDirections: function () {
-                          me.mapRoute();
+                      refreshDirections: function () {       
+                   		var lastGpsInfo = me.getGpsInfo()                     
+                       	if (lastGpsInfo.latitude != null) {
+                              me.mapRoute();
+                       		map.centerAndZoom(getWebPointFromLatLong(lastGpsInfo.latitude, lastGpsInfo.longitude), 15);
+                               me.viewModel.set("followVehicle",true);
+                           } else{
+                               alert("Current location not set, can not calculate route. Please try again in a moment.")
+                           }
                       },
                       back: function () {
                           me.viewModel.deactivateMaps();
                           kendoApp.navigate("#routeView");
                       },
-                      gpsInfo: {speed:0},
                       show: function(e) {
                           //$("body").append("test");
                           dojo.byId("map").style.width = dojo.byId("mapView").style.width;
@@ -152,7 +162,6 @@ define([
                           //may be able to use this for navigation
                           //$("#map").rotate(50);
                       },
-                      mapsActive: false,
                       activateMaps: function() {
                           me.viewModel.set("mapsActive", true);
                       },
@@ -274,22 +283,32 @@ define([
                    me.setGpsInfo(lastGpsInfo);
                },
                updateVehicleLocationOnMap:function(position){
-                   debugger;
                    
-                       if (vehicleLocationGraphic != null) {
-                           map.graphics.remove(vehicleLocationGraphic);                
-                       }
-                       vehicleLocationGraphic = createPointGraphic(position.coords.latitude, position.coords.longitude, 'images/icon_map-vehicleOnTime.png', 30, 40);
-                       map.graphics.add(vehicleLocationGraphic);
-                
-                       var zoomLevel = 15;
-                       //if(distanceRemaining < 1){
-                       //    zoomLevel = 16;
-                       //}
-                
-                       if (me.viewModel.get("followVehicle")) {
-                           map.centerAndZoom(getWebPointFromLatLong(position.coords.latitude, position.coords.longitude), zoomLevel);
-                       } 
+                   if (vehicleLocationGraphic != null) {
+                       map.graphics.remove(vehicleLocationGraphic);                
+                   }
+                   vehicleLocationGraphic = createPointGraphic(position.coords.latitude, position.coords.longitude, 'images/icon_map-vehicleOnTime.png', 30, 40);
+                   map.graphics.add(vehicleLocationGraphic);
+
+                   //var radius = map.extent.getWidth() / 10 / (10/position.coords.accuracy);
+                   
+        		   // var symbol = new SimpleFillSymbol().setColor(null).outline.setColor("blue");
+                   // var circle = new Circle({
+                   //     center: getWebPointFromLatLong(position.coords.latitude, position.coords.longitude),
+                   //     geodesic: false,
+                   //     radius: radius
+                   //     });
+                   // var graphic = new Graphic(circle, symbol);
+                   // map.graphics.add(graphic);
+                   
+                   var zoomLevel = 15;
+                   //if(distanceRemaining < 1){
+                   //    zoomLevel = 16;
+                   //}
+            
+                   if (me.viewModel.get("followVehicle")) {
+                       map.centerAndZoom(getWebPointFromLatLong(position.coords.latitude, position.coords.longitude), zoomLevel);
+                   } 
                    
                },
                geolocationWatch: null,       
@@ -310,6 +329,14 @@ define([
                getOdometer: function() {
                    return me.viewModel.get("gpsInfo.odometer");
                },
+               showLocation: function(coordinate){
+                   
+                   var endGraphic = createPointGraphic(coordinate.latitude, coordinate.longitude, 'images/icon_map-stop.png', 30, 40);
+                   map.graphics.add(endGraphic);
+
+                   map.centerAt(getWebPointFromLatLong(coordinate.latitude, coordinate.longitude));
+                   map.setZoom(15);
+               },
                mapRoute: function () {
                    var destination = me.getDestination();
                    map.graphics.clear();
@@ -326,7 +353,7 @@ define([
                    routeParams.stops.features.push(startGraphic);
                    var endGraphic = createPointGraphic(destination.latitude, destination.longitude, 'images/icon_map-stop.png', 30, 40);
                    routeParams.stops.features.push(endGraphic);
-                   //map.graphics.add(startGraphic);
+                   map.graphics.add(startGraphic);
                    map.graphics.add(endGraphic);
             
                    routeTask.solve(routeParams, routeCallback, function(error) {
@@ -335,8 +362,12 @@ define([
                    });
                },
                setDestination: function(coordinate) {
+                   map.graphics.clear();
+                   
+                   me.viewModel.set("followVehicle",false);
                    me.viewModel.set("currentDestination", coordinate);
-                   me.mapRoute();            
+                   me.viewModel.set("directionsList", []);
+                   me.showLocation(coordinate);            
                },
                getDestination: function() {
                    return me.viewModel.get("currentDestination");

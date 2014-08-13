@@ -92,7 +92,7 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
                     callback("There was a network error, please try again.");
                     return;
                 }
-                
+
     			if (result.AuthenticationError == null) {
                     sendReportInterval = setInterval(function(){
                         me.sendDriverReport();

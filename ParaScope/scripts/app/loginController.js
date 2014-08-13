@@ -91,7 +91,7 @@ function (communicationManager,routeController,geographyController,messagesContr
                         $("#errorMessage").show();
                         kendoApp.hideLoading();
                         if(errorMessage == "There was a problem logging in: <br/>Software Update Required"){
-                            communicationManager.getCurrentSoftwareVersion.done(function(version){
+                            communicationManager.getCurrentSoftwareVersion().done(function(version){
                                 if(version != constants.currentSoftwareVersion){ 
                                     me.viewModel.versionUpdate(version);
                                 }
@@ -123,15 +123,15 @@ function (communicationManager,routeController,geographyController,messagesContr
                    fileSystem.root.getFile('download/' + fileName, {
                        create: true, 
                        exclusive: false
-                   }, function(fileEntry) {                       
-
-                       var localPath = fileEntry.fullPath,
+                   }, function(fileEntry) {    
+                       debugger;
+                       var localPath = fileEntry.nativeURL,
                        fileTransfer = new FileTransfer();        
                        fileTransfer.download(apkURL, localPath, function(entry) {
                            
                            window.plugins.webintent.startActivity({
                                action: window.plugins.webintent.ACTION_VIEW,
-                               url: 'file://' + entry.fullPath,
+                               url: 'file://' + localPath,
                                type: 'application/vnd.android.package-archive'
                            },
                            function(e) {
@@ -149,7 +149,8 @@ function (communicationManager,routeController,geographyController,messagesContr
                                 } 
                                 alert(message);
                            });                              
-                       }, function (error) {
+                       }, function (error) {                
+debugger;
                            alert("Error downloading APK: " + error.code);
                        });
                    }, function(evt) {

@@ -390,7 +390,8 @@ function (communicationManager,geographyController,utilities) {
                 kendoApp.navigate("#mapView");
                 geographyController.viewModel.activateMaps();
                 //geographyController.mapRoute(e.data.Coordinate.Latitude,e.data.Coordinate.Longitude);
-                geographyController.setDestination({latitude:e.data.Coordinate.Latitude,longitude:e.data.Coordinate.Longitude});
+                debugger;
+                geographyController.setDestination({address:e.data.Address, latitude:e.data.Coordinate.Latitude,longitude:e.data.Coordinate.Longitude});
             },
             mapJobEnabled: function(e){
                 if(e.Coordinate && e.Coordinate.Latitude != 0){                    
