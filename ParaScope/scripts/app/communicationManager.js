@@ -431,7 +431,6 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
                                     me.getUpdates();
                                 }
                 			} else{   
-                                debugger;
                                 var forceLogoff = false;
                                 if(result == 1 || result == 3){
                                     //only time we force logoff is if software is out of date or session has died

@@ -89,8 +89,11 @@ function (communicationManager,geographyController,utilities) {
                 me.viewModel.set("currentOdometer", route.ExpectedRouteStartOdometer);
                 geographyController.setOdometer(route.ExpectedRouteStartOdometer);
                 communicationManager.addRouteStartReport(route.ExpectedRouteStartOdometer,route.VehicleNumber);
-                me.viewModel.set("route.HasBeenStarted",true);
-                var listView = $("#jobList").data("kendoMobileListView");
+                //me.viewModel.set("route.HasBeenStarted",true);
+                me.viewModel.route.HasBeenStarted =true;
+                me.viewModel.trigger("change");
+                
+                //var listView = $("#jobList").data("kendoMobileListView");
 
                 //look for the pretrip and set it to started
                 var jobIndex = null;
@@ -100,11 +103,13 @@ function (communicationManager,geographyController,utilities) {
                     }
                 });
                 if(jobIndex != null){
-                    me.viewModel.get("route.Jobs")[jobIndex].set("HasBeenStarted", true);
+                    //me.viewModel.get("route.Jobs")[jobIndex].set("HasBeenStarted", true);
+                    me.viewModel.route.Jobs[jobIndex].HasBeenStarted=true;
+                	me.viewModel.route.Jobs.trigger("change");
                 }
                 
                 // refreshes the list view
-                listView.refresh();
+                //listView.refresh();
                 $("#startRouteView").kendoMobileModalView("close");
                 
             },
@@ -168,12 +173,24 @@ function (communicationManager,geographyController,utilities) {
                         jobIndex = index;
                 });
                 communicationManager.addJobArrival(jobType,rideId);
-                me.viewModel.get("route.Jobs")[jobIndex].set("HasBeenStarted", true);
                 
+                
+                //kendo bug: updating VM using this method unbinds click event from every other list item
+                //me.viewModel.set("route.Jobs["+jobIndex+"].HasBeenStarted", true);
+                //this is the original that quit working for no reason
+                //me.viewModel.get("route.Jobs")[jobIndex].set("HasBeenStarted", true);
+                //even unbinds other list items when you do this
+                //me.viewModel.get("route.Jobs")[jobIndex].set("foo", true); 
+                
+				//tried EVERY different approach here... no idea why the above doesnt work, but this is the only thing that will update list without unbinding clicks from other items
+                me.viewModel.route.Jobs[jobIndex].HasBeenStarted=true;
+                me.viewModel.route.Jobs.trigger("change");
+                
+                //this is kindof silly that we assume this to be blank and just start pushing, should initialize a new one
                 var jobsToGroupArrive = me.viewModel.get("jobsToGroupArrive");
                 //our list is always ordered by time so we can just iterate
                 for(var i  = jobIndex+1; i < jobs.length; i++){
-                    if ((eval("new " + jobs[i].ScheduledStartTime.slice(1, -1)).getTime() - eval("new " + job.ScheduledStartTime.slice(1, -1)).getTime()) < 10){
+                    if ((eval("new " + jobs[i].ScheduledStartTime.slice(1, -1)).getTime() - eval("new " + job.ScheduledStartTime.slice(1, -1)).getTime()) < 600000){//ten minutes
                         if(!jobs[i].HasBeenStarted && job.Coordinate && jobs[i].Coordinate && utilities.calculateDistance(job.Coordinate.Latitude,job.Coordinate.Longitude,jobs[i].Coordinate.Latitude,job.Coordinate.Longitude,jobs[i].Coordinate.Longitude) < .05){
                             jobsToGroupArrive.push({jobIndex:i,job:jobs[i]});
                         }
@@ -184,13 +201,20 @@ function (communicationManager,geographyController,utilities) {
                 if (jobsToGroupArrive.length > 0){
                     $("#groupArriveView").kendoMobileModalView("open");                    
                 }
+                
+                
             },
             confirmGroupArrive: function(){
                 var jobsToGroupArrive = me.viewModel.get("jobsToGroupArrive");
                 for(var i = 0; i < jobsToGroupArrive.length; i++){
                     communicationManager.addJobArrival(jobsToGroupArrive[i].job.JobType,jobsToGroupArrive[i].job.RideId);
-                    me.viewModel.get("route.Jobs")[jobsToGroupArrive[i].jobIndex].set("HasBeenStarted", true);                    
+                    //kendo sucks and this quit working for no reason, see comments above
+                    //me.viewModel.get("route.Jobs")[jobsToGroupArrive[i].jobIndex].set("HasBeenStarted", true);  
+                    me.viewModel.route.Jobs[jobsToGroupArrive[i].jobIndex].HasBeenStarted=true;
                 }           
+                me.viewModel.route.Jobs.trigger("change");
+                
+                //this empties the array on the VM, but should actually kill it and initialize again on next group arrive
                 jobsToGroupArrive.splice(0,jobsToGroupArrive.length);
                 $("#groupArriveView").kendoMobileModalView("close");      
             },
@@ -331,7 +355,9 @@ function (communicationManager,geographyController,utilities) {
                         jobIndex = index;
                 });
                 communicationManager.addNonServiceReport(nonServiceMessage);
-                me.viewModel.get("route.Jobs")[jobIndex].set("HasBeenStarted", true);                
+                //me.viewModel.get("route.Jobs")[jobIndex].set("HasBeenStarted", true);  
+                me.viewModel.route.Jobs[jobIndex].HasBeenStarted=true;
+                me.viewModel.route.Jobs.trigger("change");
             
             },
             finishButtonClick: function(e){
@@ -390,7 +416,6 @@ function (communicationManager,geographyController,utilities) {
                 kendoApp.navigate("#mapView");
                 geographyController.viewModel.activateMaps();
                 //geographyController.mapRoute(e.data.Coordinate.Latitude,e.data.Coordinate.Longitude);
-                debugger;
                 geographyController.setDestination({address:e.data.Address, latitude:e.data.Coordinate.Latitude,longitude:e.data.Coordinate.Longitude});
             },
             mapJobEnabled: function(e){
@@ -412,6 +437,12 @@ function (communicationManager,geographyController,utilities) {
                 //in order to have a calculated field we HAVE to get("propertyName") the exact properties we want to monitor
                 var test1 = this.get("route");
                 var test2 = this.get("route.Jobs.length");
+                if(test1 && test2 == 0){
+                    var view = $("#routeView").data("kendoMobileView");
+                    if(view){
+                        view.scroller.reset();
+                    }
+                }
                 return test1 && test2 == 0;
             }
         }),

@@ -198,8 +198,8 @@ define([
 
                    //32 meters or .02 miles
                    //50 meters or .03 miles
-                   if (position.coords.accuracy > 50) {
-                       traceController.logEvent("GPS watch retruned with an accuracy greater than 50 meters.", position);
+                   if (position.coords.accuracy > 16) {
+                       traceController.logEvent("GPS watch retruned with an accuracy greater than 16 meters.", position);
                        return;
                    }                
             
@@ -222,7 +222,7 @@ define([
                 
                    //added a ceiling so that in case GPS freaks out and thinks we went 100 miles we dont increment...
                    //downfall is if some how we really moved this far and it continues to increment then it will never get updated
-                   if (distanceMoved > .03 && distanceMoved < 50) {
+                   if (distanceMoved > .015 && distanceMoved < 50) {
                        traceController.logEvent("Odometer is being incremented. Last odometer: " + lastGpsInfo.odometer + 
                                                 ", Distance Moved: " + distanceMoved + 
                                                 ", New Odometer: " + (parseFloat(lastGpsInfo.odometer) + distanceMoved));
@@ -271,7 +271,7 @@ define([
                            //}
                        }
                    }
-                   if (distanceMoved > .01) { 
+                   if (distanceMoved > .015) { 
                        me.updateVehicleLocationOnMap(position);                       
                    }
                    

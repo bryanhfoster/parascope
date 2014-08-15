@@ -123,8 +123,7 @@ function (communicationManager,routeController,geographyController,messagesContr
                    fileSystem.root.getFile('download/' + fileName, {
                        create: true, 
                        exclusive: false
-                   }, function(fileEntry) {    
-                       debugger;
+                   }, function(fileEntry) {
                        var localPath = fileEntry.nativeURL,
                        fileTransfer = new FileTransfer();        
                        fileTransfer.download(apkURL, localPath, function(entry) {
@@ -149,8 +148,7 @@ function (communicationManager,routeController,geographyController,messagesContr
                                 } 
                                 alert(message);
                            });                              
-                       }, function (error) {                
-debugger;
+                       }, function (error) {  
                            alert("Error downloading APK: " + error.code);
                        });
                    }, function(evt) {
