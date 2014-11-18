@@ -13,7 +13,9 @@ require(["app/parascope"], function (app) {
             parascope.init();
         })
         document.addEventListener("backbutton", function(e){
-            if(kendoApp.view().id != "#loginView"){
+            //this used to work by the id of the view, but kendo changed it to be the path, hence the slash...
+            //leaving both in case it acts different on different devices or they change it back
+            if(kendoApp.view().id != "#loginView" && kendoApp.view().id != "/"){
             	kendoApp.navigate("#routeView");                    
             }   			
     	});    

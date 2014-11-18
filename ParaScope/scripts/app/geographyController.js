@@ -150,6 +150,9 @@ define([
                                alert("Current location not set, can not calculate route. Please try again in a moment.")
                            }
                       },
+                       mapRouteBeta:function(){
+                           me.mapRouteBeta();
+                       },
                       back: function () {
                           me.viewModel.deactivateMaps();
                           kendoApp.navigate("#routeView");
@@ -167,7 +170,8 @@ define([
                       },
                       deactivateMaps: function() {
                           me.viewModel.set("mapsActive", false);                
-                      }
+                      },
+                      weAreNavigating:false
                   }),
                clearGeolocationWatch: function() {
                    traceController.logEvent("Clearing geolocation watch.");
@@ -196,12 +200,26 @@ define([
                positionRetrieved: function(position) {
                    var lastGpsInfo = me.getGpsInfo()            
 
+                   var destination = me.getDestination();
+                   if(typeof destination !== "undefined" && destination !== null){                       
+                       var distanceToDestination = utilities.calculateDistance(destination.latitude, destination.longitude, position.coords.latitude, position.coords.longitude)
+                       if(position.coords.accuracy < 30 && distanceToDestination < .05){
+                           if(me.viewModel.get("weAreNavigating") === true){
+                               me.viewModel.set("weAreNavigating",false);
+                               me.viewModel.back();
+                               window.plugins.powerManagement.focus();  
+                               //alert("we're here!");
+                           }                     
+                       }
+                   }
                    //32 meters or .02 miles
                    //50 meters or .03 miles
-                   if (position.coords.accuracy > 16) {
-                       traceController.logEvent("GPS watch retruned with an accuracy greater than 16 meters.", position);
+                   if (position.coords.accuracy > 20) {
+                       traceController.logEvent("GPS watch retruned with an accuracy greater than 20 meters.", position);
                        return;
-                   }                
+                   }  
+                   
+                   
             
                    if (lastGpsInfo.latitude == null) {
                        //we've never stored gps info so this is the first
@@ -337,7 +355,13 @@ define([
                    map.centerAt(getWebPointFromLatLong(coordinate.latitude, coordinate.longitude));
                    map.setZoom(15);
                },
+               mapRouteBeta: function () {
+                    var destination = me.getDestination();
+                    window.plugins.powerManagement.navigate(destination.latitude, destination.longitude);
+                    me.viewModel.set("weAreNavigating",true);
+               },
                mapRoute: function () {
+
                    var destination = me.getDestination();
                    map.graphics.clear();
                    var routeTask = new RouteTask("http://usloft1491.serverloft.com:6080/arcgis/rest/services/Route/NAServer/Route");

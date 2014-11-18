@@ -6,6 +6,7 @@ function (communicationManager,geographyController,utilities) {
     var me = {        
         init: function(){
             //alert(new Date());
+            //$("#groupArriveView").kendoMobileModalView("open"); 
         },
         viewModel:kendo.observable({
             showDebugView: function(){
@@ -191,7 +192,7 @@ function (communicationManager,geographyController,utilities) {
                 //our list is always ordered by time so we can just iterate
                 for(var i  = jobIndex+1; i < jobs.length; i++){
                     if ((eval("new " + jobs[i].ScheduledStartTime.slice(1, -1)).getTime() - eval("new " + job.ScheduledStartTime.slice(1, -1)).getTime()) < 600000){//ten minutes
-                        if(!jobs[i].HasBeenStarted && job.Coordinate && jobs[i].Coordinate && utilities.calculateDistance(job.Coordinate.Latitude,job.Coordinate.Longitude,jobs[i].Coordinate.Latitude,job.Coordinate.Longitude,jobs[i].Coordinate.Longitude) < .05){
+                        if(!jobs[i].HasBeenStarted && jobs[i].ArriveEnabled && job.Coordinate && jobs[i].Coordinate && utilities.calculateDistance(job.Coordinate.Latitude,job.Coordinate.Longitude,jobs[i].Coordinate.Latitude,job.Coordinate.Longitude,jobs[i].Coordinate.Longitude) < .05){
                             jobsToGroupArrive.push({jobIndex:i,job:jobs[i]});
                         }
                     } else{
@@ -199,7 +200,10 @@ function (communicationManager,geographyController,utilities) {
                     }                    
                 }
                 if (jobsToGroupArrive.length > 0){
-                    $("#groupArriveView").kendoMobileModalView("open");                    
+                    debugger;
+                    $("#groupArriveView").kendoMobileModalView("open");
+                    var groupArriveView = $("#groupArriveView").data("kendoMobileModalView");
+                    groupArriveView.scroller.reset();
                 }
                 
                 
@@ -456,7 +460,7 @@ function (communicationManager,geographyController,utilities) {
                 if(delta.length > 0){
                     var template = kendo.template($("#routeUpdatedTemplate").html());                
                     var result = kendo.render(template, delta); //Execute the template                
-                    $("div[data-role='header']").append('<div class="alert alert-warning alert-dismissable" data-dismiss="alert"> <div class="row"><div class="col-xs-11"><strong><h2><ul>' + result + '</ul></h2></strong></div><div class="col-lg-1"><div class="pull-right" data-dismiss="alert"><i class="icon-remove-sign icon-2x"></i></div></div></div></div>');
+                    $("#routeViewHeader").append('<div class="alert alert-warning alert-dismissable" data-dismiss="alert"> <div class="row"><div class="col-xs-11"><strong><h2><ul>' + result + '</ul></h2></strong></div><div class="col-lg-1"><div class="pull-right" data-dismiss="alert"><i class="icon-remove-sign icon-2x"></i></div></div></div></div>');
                     navigator.notification.beep(2);
                 }
             }
@@ -485,7 +489,7 @@ function (communicationManager,geographyController,utilities) {
         }
     };
     
-    kendo.bind($("#header"),me.viewModel);
+    kendo.bind($("#routeViewHeader"),me.viewModel);
     
     return me;
     

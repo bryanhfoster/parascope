@@ -47,6 +47,14 @@ PowerManagement.prototype.dim = function(successCallback,failureCallback) {
     cordova.exec(successCallback, failureCallback, 'PowerManagement', 'acquire', [true]);
 }
 
+PowerManagement.prototype.focus = function(successCallback,failureCallback) {
+    cordova.exec(successCallback, failureCallback, 'PowerManagement', 'focus', [true]);
+}
+
+PowerManagement.prototype.navigate = function(lat,lon,successCallback,failureCallback) {
+    cordova.exec(successCallback, failureCallback, 'PowerManagement', 'navigate', [lat,lon]);
+}
+
 if(!window.plugins) {
     window.plugins = {};
 }

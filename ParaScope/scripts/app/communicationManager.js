@@ -9,7 +9,7 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
     var subscribedToUpdates = false;
     var sendReportInterval = null;
     var companyName = null;
-    
+    var pingTimeout;
     var me = {
         needToGetUpdates: false,
         init: function(onUpdateCallback,onExceptionHandler) {
@@ -141,7 +141,12 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
                     traceController.logEvent("PubNub ping recieved from server.");
     				//we want to wrap this in a helper function
     				me.needToGetUpdates = true;
-                    me.sendDriverReport();
+                    //in case 10 pings come in at once we want to wait until we are done recieving them to call send report
+                    //this will happen if we are offline for a while
+                    clearTimeout(pingTimeout);
+                    pingTimeout = setTimeout(function() {
+                        me.sendDriverReport();
+                    },2000); 
     			},
     			restore: true,
     			connect: function () {
@@ -399,6 +404,7 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
         },
         reportSubmittedCallbackHandler: null,
         sendDriverReport: function(){
+            
             //we always need to send driver report before getting updates... 
             //do nothing if not connected, but if there is a driver report to send then only get updates on the success callback
             //if there is no driver report and we need to get updates then go for it

@@ -1,45 +1,29 @@
-<div data-role="modalview" id="groupArriveView" data-model="parascope.controllers.route.viewModel" style="width: 75%; height:75%">
-    
+<div data-role="modalview"  id="groupArriveView" data-model="parascope.controllers.route.viewModel" style="width: 75%; height:75%">
+
     <!--start: Modal Header -->
-    <div class="row modalClose-row">
-        
-        <div class="col-xs-9">
-          <h3>Do you also want to arrive the following jobs?</h3>
+    <div data-role="header">
+        <div data-role="navbar">
+           
+            <div class="km-view-title">
+                <span>Do you also want to arrive the following jobs?</span>
+
+            </div>
         </div>
-        <div class="col-xs-3">
-          <div class="pull-right" data-bind="click: cancelGroupArrive"><i class="icon-remove-sign"></i></div>
+    </div>
+
+    <ul id="jobList" data-role="listview"
+        data-style="inset"
+        data-template="groupArriveTemplate"
+        data-bind="source: jobsToGroupArrive" >
+    </ul>
+
+    <div  data-role="footer" class="text-center" >
+        <div class="btn btn-responsive btn-success" data-bind="click:confirmGroupArrive" style="width:45%">
+            <i class="icon-ok "></i> Yes
+        </div>
+        <div class="btn btn-responsive btn-danger" data-bind="click:cancelGroupArrive" style="width:45%">
+            <i class="icon-remove"></i> No
         </div>
 
     </div>
-    <!--end: Modal Header -->
-    
-            <hr>
-    
-    <!--start: Modal Body -->
-    <div class="row modalBody" >
-        
-        <div class="col-xs-12">
-            
-           <ul id="jobList" data-role="listview"
-        		data-style="inset"
-        		data-template="groupArriveTemplate"
-        		data-bind="source: jobsToGroupArrive" >
-	        </ul>
-        	
-            <div class="row modalSubmit-row" >
-                <div class="col-xs-12">          
-                    <div class="btn-group btn-group-justified">
-                        <div class="btn btn-responsive btn-success" data-bind="click:confirmGroupArrive"><i class="icon-ok "></i> Yes</div> 
-                        <div class="btn btn-responsive btn-danger" data-bind="click:cancelGroupArrive"><i class="icon-remove"></i> No</div>
-                        
-                    </div>
-                </div>
-            </div>
-        	
-
-         
-        </div>
-    </div> 
-    <!--end: Modal Body -->
-    
 </div>

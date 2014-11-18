@@ -14,7 +14,7 @@ html, body
     color: Red;
 }
 /*set global bg color and image*/
-body, .km-flat, .km-flat .km-navbar, .km-flat .km-content { background: #fff url(../images/bg.jpg) 50% 0 no-repeat; }
+body, .km-flat,  .km-flat .km-content { background: #fff url(../images/bg.jpg) 50% 0 no-repeat; }
 
 a:hover { text-decoration: none; }
 
@@ -148,28 +148,27 @@ hr
 .modalClose-row > div.col-lg-9 { padding-left: 0; } 
 .modalClose-row > div.col-lg-3 { padding-right: 0; } 
 
-.modalBody { }
-.modalBody-row { margin: 0px 0px 20px 0; }
-.modalBody-row h1 { padding: 0; margin: 0}
-
-.modalSubmit-row { margin: 40px 0 20px 0} 
-
-.km-modalview-wrapper { }
 
 .km-modalview-wrapper .km-modalview
 {
     -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
     box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
 }
+.km-modalview-wrapper .km-footer
+{
+    padding-bottom:10px;
+    background-color:White;
+}
+.km-navbar{
+    rgb(223, 223, 223);
+}
+.km-view-title, .km-dialog-title{
+    font-size:25px;
+    line-height:26px;
+}
 .km-modalview-wrapper .km-modalview .km-content
 {
 
-    position: relative;
-    background-color: #ffffff;
-    border: 1px solid #999999;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 6px;
-    outline: none;
     -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
     box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
     background-clip: padding-box;

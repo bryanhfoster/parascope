@@ -39,10 +39,12 @@ function (communicationManager,routeController,geographyController,messagesContr
         			//We don't have device information so save it to the phone for the future
         			deviceInformation = {};
         			deviceInformation.Identifier = utilities.getGuid();
-            	    deviceInformation.Customer = me.viewModel.get("credentials.customer");
-            		deviceInformation.DeviceDescription = me.viewModel.get("credentials.description");
-    		        localData.saveDeviceInformation(deviceInformation);
         		}
+                
+        	    deviceInformation.Customer = me.viewModel.get("credentials.customer");
+        		deviceInformation.DeviceDescription = me.viewModel.get("credentials.description");
+		        localData.saveDeviceInformation(deviceInformation);
+                
                 $("#settingsView").kendoMobileModalView("close");
             },
             loginBeforeShow: function(){
