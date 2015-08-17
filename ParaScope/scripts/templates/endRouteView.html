@@ -1,25 +1,24 @@
-<div data-role="modalview" id="endRouteView" data-model="parascope.controllers.route.viewModel" style="width: 75%;height: 75%;">
-    
+<div data-role="view" id="endRouteView" data-model="parascope.controllers.route.viewModel">
 
     <!--start: Modal Header -->
     <div class="row modalClose-row">
-        
+
         <div class="col-xs-9">
-          <h3>End Route</h3>
-        </div>
-        <div class="col-xs-3">
-          <div class="pull-right" data-bind="click: hideEndRoute"><i class="icon-remove-sign"></i></div>
+            <h3>Confirm Route End - Driver Signature</h3>
         </div>
 
     </div>
     <!--end: Modal Header -->
-    
-    
-    
+
+    <div id="canvasContainer2" class="row modalBody" style="text-align:center;" >
+        <canvas id="canvas2" style="border:2px solid #000000;margin-top:10px;"></canvas>
+
+    </div>
+
     <div class="row" style="padding:20px 0;">
-        
+
         <div class="col-xs-12">
-        	<form>		
+            <form>
                 <fieldset>
 
                     <div class="form-group">
@@ -40,12 +39,19 @@
                             </span>
                         </div>
                     </div>
-                    
-                    <div class="btn btn-primary btn-block btn-responsive" data-bind="click: endRoute">Submit</div>
-                  
+                    <div class="submit-row">
+                        <div class="btn-group btn-group-justified">
+                            <div style="width:80%" class="btn btn-primary btn-responsive" data-bind="click: endRoute, enabled: canSubmitLogoff, text:logoffPerformButtonText"></div>
+                            <div style="width:20%" class="btn btn-responsive btn-danger" data-bind="click:hideEndRoute">
+                                <i class="icon-remove"></i> Cancel
+                            </div>
+
+                        </div>
+
+                    </div>
                 </fieldset>
-    	    </form>            
+            </form>
         </div>
-    </div> 
-    
+    </div>
+
 </div>

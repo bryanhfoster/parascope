@@ -38,6 +38,7 @@
             </div>
             <div class="body-row">
                 <div class="btn btn-default btn-responsive" data-bind="click: captureSignatureClick">Capture Signature</div><br/>
+                <div class="btn btn-default btn-sm" data-bind="click: captureSignatureOnDropoffClick">Capture Signature at Dropoff</div><br/>
                 <label data-bind="text: currentSignatureReason"></label>
                 <img data-bind="visible: showSignature, attr: { src: signature }" style="width:90%;" />
             </div>
@@ -79,7 +80,7 @@
                           <span class="input-group-btn">
                               <div class="btn btn-default btn-responsive" data-bind="click: decrementField" data-field="job.RideFare"><i class="icon-minus"></i></div>
                          </span>
-                          <input class="form-control input-responsive" type="number" data-bind="value: job.RideFare" name="fare" validationMessage="* required" required />
+                          <input class="form-control input-responsive" type="tel" data-bind="value: job.RideFare" name="fare" validationMessage="* required" required />
                           <span class="input-group-btn">
                               <div class="btn btn-default btn-responsive" data-bind="click: incrementField" data-field="job.RideFare"><i class="icon-plus"></i></div>  
                          </span>
@@ -141,23 +142,8 @@
                         </div>
                     </div>
                     <!-- end: submit buttons -->
-
-
-
-      
-
                 </fieldset>
     	    </form>   
         </div>
-        
-        
-        
-        
-        
-        
-
-        
-        
-        
     </div>   
 </div>

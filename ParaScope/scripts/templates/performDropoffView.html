@@ -24,6 +24,11 @@
                 <label>Special Assistance Codes</label>
                 <p  data-bind="text: formatCurrentJobSpecialAssistance"></p>
             </div>
+            <div class="body-row">
+                <div class="btn btn-default btn-responsive" data-bind="click: captureSignatureClick,visible:job.SignatureRequired">Capture Signature</div><br/>
+                <label data-bind="text: currentSignatureReason"></label>
+                <img data-bind="visible: showSignature, attr: { src: signature }" style="width:90%;" />
+            </div>
             
         </div>
         
@@ -56,7 +61,8 @@
                     <div class="submit-row">
                         <div class="btn-group btn-group-justified">
                             
-                            <div style="width:70%" class="btn btn-success btn-responsive" data-bind="click: performDropoff">Confirm Dropoff</div>
+                            <div style="width:70%" class="btn btn-success btn-responsive" 
+                                data-bind="click: performDropoff, enabled: allowPerformDropoff, text:dropoffPerformButtonText"></div>
                             <div style="width:15%" class="btn btn-default btn-responsive" data-bind="click:cancelPerform"><i class="icon-remove"></i></div>
     
                         </div>

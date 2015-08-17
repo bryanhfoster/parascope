@@ -1,0 +1,45 @@
+<div data-role="modalview" id="confirmArriveView" data-model="parascope.controllers.route.viewModel" style="width: 75%; height:350px;">
+    
+    <!--start: Modal Header -->
+    <div class="row modalClose-row">
+        
+        <div class="col-xs-9">
+          <h3>Confirm Arrival</h3>
+        </div>
+        <div class="col-xs-3">
+          <div class="pull-right" data-bind="click: hideConfirmArrive"><i class="icon-remove-sign"></i></div>
+        </div>
+
+    </div>
+    <!--end: Modal Header -->
+    
+    
+    <!--start: Modal Body -->
+    <div class="row modalBody" >
+        
+        <div class="col-xs-12">
+                       
+            
+            <div class="row modalBody-row" >
+                <div class="col-xs-12">
+                    <h2 data-bind="text: confirmArriveText"></h2>   
+                </div>
+            </div>
+        	        	
+            <div class="row modalSubmit-row" >
+                <div class="col-xs-12">          
+                    <div class="btn-group btn-group-justified">
+                        <div class="btn btn-responsive btn-success" data-bind="click:arriveJobConfirmed"><i class="icon-ok "></i> Yes</div> 
+                        <div class="btn btn-responsive btn-danger" data-bind="click:hideConfirmArrive"><i class="icon-remove"></i> No</div>
+                        
+                    </div>
+                </div>
+            </div>
+        	
+
+         
+        </div>
+    </div> 
+    <!--end: Modal Body -->
+    
+</div>

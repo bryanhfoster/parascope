@@ -28,6 +28,7 @@ function(constants){
         {name:"routeEndingView",type:"html"},
         {name:"confirmCallRiderView",type:"html"},
         {name:"groupArriveView",type:"html"},
+        {name:"confirmArriveView",type:"html"},
         {name:"softwareUpdatingView",type:"html"}
     ];
     

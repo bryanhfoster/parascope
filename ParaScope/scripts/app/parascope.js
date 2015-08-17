@@ -12,6 +12,8 @@ function (communicationManager,templateLoader,loginController,routeController,me
                 
                 //setting initial view doesn't explicitly navigate us back to login on refresh so do it EVERY time we call init
                 kendoApp.navigate("#loginView");  
+                //for testing
+                //kendoApp.navigate("#performPickupView");
         		                
                 //stupid but kendo wasn't fully initialized and doesn't have a ready method so we have to put this in a timeout.
                 setTimeout(function(){
