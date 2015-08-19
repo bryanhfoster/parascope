@@ -82,7 +82,10 @@ function (communicationManager,geographyController,utilities) {
                 $(e.currentTarget).toggleClass("active",true);
             },
             allowConfirmSignature: function(){
-                return me.viewModel.get("signatureReasonIsSelected") && me.viewModel.get("signatureCaptured");
+                return me.viewModel.get("signatureReasonIsSelected") 
+                        && (me.viewModel.get("currentSignatureReason") == "Rider Unable to Sign" 
+                        || me.viewModel.get("currentSignatureReason") == "Rider Refused to Sign" 
+                        || me.viewModel.get("signatureCaptured"));
             },
             showGeography: function(){                
                     kendoApp.navigate("#geographyView");
@@ -96,7 +99,7 @@ function (communicationManager,geographyController,utilities) {
                 geographyController.setOdometer(route.ExpectedRouteStartOdometer);
                 communicationManager.addRouteStartReport(route.ExpectedRouteStartOdometer,route.VehicleNumber);
                 //me.viewModel.set("route.HasBeenStarted",true);
-                me.viewModel.route.HasBeenStarted =true;
+                me.viewModel.route.HasBeenStarted = true;
                 me.viewModel.trigger("change");
                 
                 //var listView = $("#jobList").data("kendoMobileListView");
@@ -147,11 +150,12 @@ function (communicationManager,geographyController,utilities) {
                 if (validator && !validator.validate()) {
                    return;
                 }
+
                 me.viewModel.set("route", null);
                 var odometer = me.viewModel.get("currentOdometer");
                 var signature = signaturePad2.toDataURL();
                 communicationManager.addRouteEndReport(odometer, signature, me.viewModel.endRouteCompleted);
-                $("#endRouteView").kendoMobileModalView("close");
+                //$("#endRouteView").kendoMobileModalView("close");
                 $("#routeEndingView").kendoMobileModalView("open");
             },
             endRouteCompleted: function(){
@@ -296,8 +300,7 @@ function (communicationManager,geographyController,utilities) {
                 }
                 else if(e.data.JobType == 2){
                     kendoApp.navigate("#performDropoffView");
-                	validator = $("#performDropoffView").kendoValidator().data("kendoValidator");     
-                    debugger;
+                	validator = $("#performDropoffView").kendoValidator().data("kendoValidator"); 
                     me.viewModel.set("allowPerformDropoff",!e.data.SignatureRequired);
                 }
                 
@@ -334,12 +337,11 @@ function (communicationManager,geographyController,utilities) {
                 var dropoffindex = null;
                 var dropoff = $.grep(me.viewModel.route.Jobs,function(element,index){
                     dropoffindex = index;
-                    return element.RideId != job.RideId && element.JobType == 2;
+                    return element.RideId == job.RideId && element.JobType == 2;
                 });
                 
-                me.viewModel.set("signature",'');
-                me.viewModel.set("currentSignatureReason",'');
-                debugger;
+                me.viewModel.set("signature",null);
+                me.viewModel.set("currentSignatureReason",'Will Capture Signature At Dropoff');
                 me.viewModel.set("route.Jobs[" + dropoffindex + "].SignatureRequired",job.SignatureRequired);
             },
             cancelCaptureSignature: function(e){
@@ -358,6 +360,17 @@ function (communicationManager,geographyController,utilities) {
                 return me.viewModel.get("canSubmitLogoff") ? "Submit" : "Signature Required";
             },
             confirmCaptureSignature: function(e){
+                var job = me.viewModel.get("job");
+
+                
+                var dropoffindex = null;
+                var dropoff = $.grep(me.viewModel.route.Jobs,function(element,index){
+                    dropoffindex = index;
+                    return element.RideId == job.RideId && element.JobType == 2;
+                });
+                
+                me.viewModel.set("route.Jobs[" + dropoffindex + "].SignatureRequired",false);
+                
                 //this is lame but just set them both since we don't know if we are capturing on pick or drop
                 me.viewModel.set("allowPerformPickup",true);
                 me.viewModel.set("allowPerformDropoff",true);
@@ -396,7 +409,7 @@ function (communicationManager,geographyController,utilities) {
                 											utilities.makeValidNumber(job.Escorts),utilities.makeValidNumber(job.NumberOfPasses),odometer,signature,signatureReason);
                 
                 //clear signature                
-                me.viewModel.set("signature",'');
+                me.viewModel.set("signature",null);
                 me.viewModel.set("currentSignatureReason",'');
                 
                 geographyController.setOdometer(odometer);
@@ -427,7 +440,7 @@ function (communicationManager,geographyController,utilities) {
                 //doing this just like we do on pickup, but need to ensure that nothing lingers since we are using stupid local variable for this
                 //ensure that signatures for 
                 //clear signature                
-                me.viewModel.set("signature",'');
+                me.viewModel.set("signature",null);
                 me.viewModel.set("currentSignatureReason",'');
                 
                 geographyController.setOdometer(odometer);
@@ -480,7 +493,7 @@ function (communicationManager,geographyController,utilities) {
                 me.viewModel.set("allowPerformPickup",!job.SignatureRequired);
                 
                 
-                me.viewModel.set("signature",'');
+                me.viewModel.set("signature",null);
                 me.viewModel.set("currentSignatureReason",null);
                 
                 //Get Odometer from Geography
@@ -501,6 +514,11 @@ function (communicationManager,geographyController,utilities) {
                 $("#performQuestionView").kendoMobileModalView("close");
                 $("#noShowReasons > div").toggleClass("active",false);
                 validator = $("#performNoShowView").kendoValidator().data("kendoValidator");
+                
+            },
+            navigateMaintenance: function(e){
+
+                me.viewModel.set("currentOdometer",me.viewModel.getOdometerFromGeography());
                 
             },
             viewButtonClick: function(e){
@@ -546,6 +564,22 @@ function (communicationManager,geographyController,utilities) {
                     }
                 }
                 return test1 && test2 == 0;
+            },
+            gallons: null,
+            cost: null,
+            sendFluidsReport: function(){
+               validator = $("#maintenanceView").kendoValidator().data("kendoValidator");
+               if (!validator.validate()) {
+                   return;
+                }
+                var odometer = me.viewModel.get("currentOdometer");
+                geographyController.setOdometer(odometer);
+                communicationManager.addFluidsReport(me.viewModel.get("gallons"),me.viewModel.get("cost"),odometer);
+                me.viewModel.set("cost",null);
+                me.viewModel.set("gallons",null);
+                //me.viewModel.set("odometer",null);
+                alert("Successfully Submitted.");
+                kendoApp.navigate("#routeView");
             }
         }),
         getRoute: function() {
