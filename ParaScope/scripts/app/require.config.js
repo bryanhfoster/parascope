@@ -10,13 +10,15 @@ var require = {
         "bootstrap": "../lib/bootstrap.min",
         "amplify": "../lib/amplify",
         "pubnub": "../lib/pubnub-3.6.7.min",
-        "signature": "../lib/signature_pad"
+        "signature": "../lib/signature_pad",
+        "jSignature": "../lib/jSignature.min"
     },
     shim: {
-        "app/parascope": ["jquery","amplify", "signature", "pubnub", "kendo", "bootstrap"],//this loads anything that we need for our app
+        "app/parascope": ["jquery","amplify", "signature", "jSignature", "pubnub", "kendo", "bootstrap"],//this loads anything that we need for our app
         "kendo": ["jquery"],
         "bootstrap": ["jquery"],
-        "amplify": ["jquery"]
+        "amplify": ["jquery"],
+        "jSignature": ["jquery"]
     },
     waitSeconds: 30
 };

@@ -153,7 +153,7 @@ function (communicationManager,geographyController,utilities) {
 
                 me.viewModel.set("route", null);
                 var odometer = me.viewModel.get("currentOdometer");
-                var signature = signaturePad2.toDataURL();
+                var signature = signaturePad2 != null ? signaturePad2.toDataURL() : null;
                 communicationManager.addRouteEndReport(odometer, signature, me.viewModel.endRouteCompleted);
                 //$("#endRouteView").kendoMobileModalView("close");
                 $("#routeEndingView").kendoMobileModalView("open");
@@ -315,7 +315,9 @@ function (communicationManager,geographyController,utilities) {
                 $("#signatureReasons > div").toggleClass("active",false);                
                 me.viewModel.set("signatureReasonIsSelected",false);           
                 me.viewModel.set("signatureCaptured",false);
+                kendoApp.navigate("#captureSignatureView");
                 if(!canvas){
+                   
                     canvas = document.querySelector("canvas");
                     signaturePad = new SignaturePad(canvas);  
                     signaturePad.onEnd = function(){                    
@@ -324,7 +326,6 @@ function (communicationManager,geographyController,utilities) {
                 }
                 
                 signaturePad.clear();
-                kendoApp.navigate("#captureSignatureView");
                 
                 canvas.width = $("#canvasContainer").width()-50;
                 canvas.height = 180;//$(window).height()- 100;
@@ -522,6 +523,16 @@ function (communicationManager,geographyController,utilities) {
                 
             },
             viewButtonClick: function(e){
+                
+                //setInterval(function() {
+                //    console.log( document.getElementsByTagName('*').length )
+                //    // for (var x = 0; x < 1000000; x++){
+                //    //    if (typeof globalshit === "undefined")
+                //    //        globalshit = [];
+                //    //    globalshit.push(x);
+                //    //}
+                //}, 5000);     
+                
                 me.viewModel.set("job",e.data);
                 kendoApp.navigate("#detailView");
             },
