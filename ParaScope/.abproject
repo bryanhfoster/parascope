@@ -63,5 +63,10 @@
   "DisplayName": "",
   "Framework": "Cordova",
   "Author": "",
-  "Description": "ParaScope"
+  "Description": "ParaScope",
+  "projectVersion": "1",
+  "WP8WindowsPublisherName": "CN=Telerik",
+  "WP8PackageIdentityName": "1234Telerik.com.telerik.ParaScope",
+  "WP8PublisherID": "{fc27ae9c-d7b1-4529-bc94-bd8d9a2c5c4c}",
+  "WP8ProductID": "{881176fb-100a-4527-bb7e-88efd728e5b1}"
 }
