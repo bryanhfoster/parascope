@@ -336,14 +336,16 @@ function (communicationManager,geographyController,utilities) {
 
                 var job = me.viewModel.get("job");
                 var dropoffindex = null;
+                //fucking stupid dont use grep here, just need the index
                 var dropoff = $.grep(me.viewModel.route.Jobs,function(element,index){
-                    dropoffindex = index;
-                    return element.RideId == job.RideId && element.JobType == 2;
+                    if(element.RideId == job.RideId && element.JobType == 2){
+                        dropoffindex = index;                        
+                    }
                 });
-                
+
                 me.viewModel.set("signature",null);
                 me.viewModel.set("currentSignatureReason",'Will Capture Signature At Dropoff');
-                me.viewModel.set("route.Jobs[" + dropoffindex + "].SignatureRequired",job.SignatureRequired);
+                me.viewModel.set("route.Jobs[" + dropoffindex + "].SignatureRequired",true);
             },
             cancelCaptureSignature: function(e){
                 var job = me.viewModel.get("job");
