@@ -334,7 +334,7 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
             
             me.sendDriverReport();
         },
-        addRouteEndReport: function(odometer,callback){
+        addRouteEndReport: function(odometer, signature, callback){
             
             var driverReport = localData.loadDriverReport();
             
@@ -346,7 +346,7 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
             if(driverReport == null){
                 driverReport = me.createEmptyDriverReport(localData.loadDeviceInformation().Identifier);
             }
-            driverReport.LogoffReport = {Odometer:odometer,OccuranceDateJson:utilities.getCurrentUTC()};
+            driverReport.LogoffReport = {Odometer:odometer, DriverSignature:signature, OccuranceDateJson:utilities.getCurrentUTC()};
             localData.saveDriverReport(driverReport);
             
             me.sendDriverReport();
@@ -366,6 +366,23 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
             
             me.sendDriverReport();
     	},
+        addFluidsReport: function(gallons, cost, odometer) {
+            var driverReport = localData.loadDriverReport();
+            if(driverReport == null){
+                driverReport = me.createEmptyDriverReport(localData.loadDeviceInformation().Identifier);
+            }
+            var fluids = {
+                OccuranceDateJson:utilities.getCurrentUTC(),
+                TotalGallons:gallons,
+                TotalCost:cost,
+                Odometer: odometer
+            };           
+             
+            driverReport.FluidsReport = fluids;
+            localData.saveDriverReport(driverReport);
+            
+            me.sendDriverReport();
+    	},
         addJobPerformNoShow: function(rideId, jobType, odometer,noShowReason){
             var jobPerform = {FareCollected:null,JobType:jobType,NoShowReason:noShowReason,NumberOfChildren:null,NumberOfEscorts:null,NumberOfPasses:null,OccuranceDateJson:utilities.getCurrentUTC(),RideId:rideId,Odometer:odometer};
             me.addJobPerform(jobPerform);
@@ -380,14 +397,27 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
                 NumberOfEscorts:numberOfEscorts,
                 NumberOfPasses:numberOfPasses,
                 OccuranceDateJson:utilities.getCurrentUTC(),
-                RideId:rideId,Odometer:odometer, 
+                RideId:rideId,
+                Odometer:odometer, 
                 Signature:signature, 
                 SignatureReason:signatureReason
             };            
             me.addJobPerform(jobPerform);
         },
-        addJobPerformDropoff: function(rideId, odometer, jobType){
-            var jobPerform = {FareCollected:null,JobType:jobType,NoShowReason:null,NumberOfChildren:null,NumberOfEscorts:null,NumberOfPasses:null,OccuranceDateJson:utilities.getCurrentUTC(),RideId:rideId,Odometer:odometer};
+        addJobPerformDropoff: function(rideId, odometer, jobType, signature, signatureReason){
+            var jobPerform = {
+                FareCollected:null,
+                JobType:jobType,
+                NoShowReason:null,
+                NumberOfChildren:null,
+                NumberOfEscorts:null,
+                NumberOfPasses:null,
+                OccuranceDateJson:utilities.getCurrentUTC(),
+                RideId:rideId,
+                Odometer:odometer, 
+                Signature:signature, 
+                SignatureReason:signatureReason
+            };
             me.addJobPerform(jobPerform);
         },
         addJobPerform: function(jobPerform){
@@ -503,6 +533,9 @@ function (localData,remoteData,constants,utilities,geographyController,traceCont
                 }
                 if(driverReportToMerge.LogoffReport){
                     driverReport.LogoffReport = driverReportToMerge.LogoffReport;
+                }
+                if(driverReportToMerge.FluidsReport){
+                    driverReport.FluidsReport = driverReportToMerge.FluidsReport;
                 }
             }
             localData.saveDriverReport(driverReport);

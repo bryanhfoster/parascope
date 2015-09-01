@@ -15,6 +15,7 @@ function(constants){
         {name:"routeView",type:"html"},
         {name:"messagesView",type:"html"},
         {name:"predefinedMessageView",type:"html"},
+        {name:"maintenanceView",type:"html"},
         {name:"performPickupView",type:"html"},
         {name:"performDropoffView",type:"html"},
         {name:"performNoShowView",type:"html"},
@@ -28,6 +29,7 @@ function(constants){
         {name:"routeEndingView",type:"html"},
         {name:"confirmCallRiderView",type:"html"},
         {name:"groupArriveView",type:"html"},
+        {name:"confirmArriveView",type:"html"},
         {name:"softwareUpdatingView",type:"html"}
     ];
     

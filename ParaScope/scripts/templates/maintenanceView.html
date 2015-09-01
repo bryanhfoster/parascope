@@ -1,0 +1,70 @@
+<div data-role="view" id="maintenanceView"  data-model="parascope.controllers.route.viewModel" data-layout="mobile-tabstrip" data-before-show="parascope.controllers.route.viewModel.navigateMaintenance">
+    <div class="row" style="padding:20px 0;">
+
+        <div class="col-xs-12">
+            <form>
+                <fieldset>
+
+                    <div class="form-group">
+                        <label>
+                            Odometer <span class="k-invalid-msg danger" data-for="odometer"></span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <div class="btn btn-default btn-responsive" data-bind="click: decrementField" data-field="currentOdometer">
+                                    <i class="icon-minus"></i>
+                                </div>
+                            </span>
+                            <input class="form-control input-responsive" type="number" data-bind="value: currentOdometer" name="odometer" validationMessage="* required" required />
+                            <span class="input-group-btn">
+                                <div class="btn btn-default btn-responsive" data-bind="click: incrementField" data-field="currentOdometer">
+                                    <i class="icon-plus"></i>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Gas Gallons <span class="k-invalid-msg danger" data-for="gallons"></span>
+                        </label>
+                        <div class="input-group">
+
+                            <span class="input-group-btn">
+                                <div class="btn btn-default btn-responsive" data-bind="click: decrementField" data-field="gallons">
+                                    <i class="icon-minus"></i>
+                                </div>
+                            </span>
+                            <input class="form-control input-responsive" type="tel" data-bind="value: gallons" name="gallons" validationMessage="* required" required />
+                            <span class="input-group-btn">
+                                <div class="btn btn-default btn-responsive" data-bind="click: incrementField" data-field="gallons">
+                                    <i class="icon-plus"></i>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Gas Cost <span class="k-invalid-msg danger" data-for="cost"></span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <div class="btn btn-default btn-responsive" data-bind="click: decrementField" data-field="cost">
+                                    <i class="icon-minus"></i>
+                                </div>
+                            </span>
+                            <input class="form-control input-responsive" type="tel" data-bind="value: cost" name="cost" validationMessage="* required" required />
+                            <span class="input-group-btn">
+                                <div class="btn btn-default btn-responsive" data-bind="click: incrementField" data-field="cost">
+                                    <i class="icon-plus"></i>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="btn btn-primary btn-block btn-responsive" data-bind="click: sendFluidsReport">Submit</div>
+
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

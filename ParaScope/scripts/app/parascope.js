@@ -1,5 +1,5 @@
-define(["app/communicationManager","app/templateLoader","app/loginController","app/routeController","app/messagesController","app/geographyController","app/traceController"],
-function (communicationManager,templateLoader,loginController,routeController,messagesController,geographyController,traceController) {
+define(["app/communicationManager","app/templateLoader","app/loginController","app/routeController","app/messagesController","app/geographyController","app/traceController","app/maintenanceController"],
+function (communicationManager,templateLoader,loginController,routeController,messagesController,geographyController,traceController,maintenanceController) {
     return {
         init: function(){
             //always load all templates first
@@ -12,6 +12,8 @@ function (communicationManager,templateLoader,loginController,routeController,me
                 
                 //setting initial view doesn't explicitly navigate us back to login on refresh so do it EVERY time we call init
                 kendoApp.navigate("#loginView");  
+                //for testing
+                //kendoApp.navigate("#performPickupView");
         		                
                 //stupid but kendo wasn't fully initialized and doesn't have a ready method so we have to put this in a timeout.
                 setTimeout(function(){
@@ -19,6 +21,7 @@ function (communicationManager,templateLoader,loginController,routeController,me
                     routeController.init();
                     //messagesController.init(); //this now gets initialized after login
                     geographyController.init();  
+                    //maintenanceController.init();  
                     traceController.init(); 
                 },1000);
             });
@@ -85,7 +88,8 @@ function (communicationManager,templateLoader,loginController,routeController,me
             route: routeController,
             messages: messagesController,
             geography: geographyController,
-            trace: traceController
+            trace: traceController,
+            maintenance: maintenanceController
         },
         setDeviceStatus: function(isOnline, numberOfMessages){
             if(isOnline){

@@ -28,7 +28,7 @@ function (utilities) {
             sendTraceToServer:false
         }),        
         logEvent: function(event,object)  {
-            
+            return;
             var objectString = "";
             if(object){
                 objectString = JSON.stringify(object);

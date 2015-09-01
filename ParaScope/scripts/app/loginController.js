@@ -58,7 +58,6 @@ function (communicationManager,routeController,geographyController,messagesContr
                 $("#settingsView").kendoMobileModalView("open");  
             },
             login: function() {
-                
                 //disable the login button so they can't click it twice
                 me.viewModel.set("loginEnabled",false);
                 
